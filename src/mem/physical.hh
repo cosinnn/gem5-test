@@ -164,6 +164,10 @@ class PhysicalMemory : public Serializable
 
     const bool isSparseRestore;
 
+    bool restoreFromXiangshanCpt;      // ← 新增
+    std::string xsCptPath;             // ← 新增
+
+
     // The physical memory used to provide the memory in the simulated
     // system
     std::vector<BackingStoreEntry> backingStore;
@@ -197,6 +201,8 @@ class PhysicalMemory : public Serializable
                    const std::vector<AbstractMemory *> &_memories,
                    bool mmap_using_noreserve,
                    const std::string &shared_backstore,
+                   bool restore_from_gcpt,
+                   const std::string &gcpt_path,
                    bool auto_unlink_shared_backstore,
                    bool is_sparse_restore = false);
 
@@ -297,6 +303,8 @@ class PhysicalMemory : public Serializable
      * ranges are mapped to logical memories in the guest system.
      */
     void unserialize(CheckpointIn &cp) override;
+    
+    bool tryRestoreFromXSCpt();        // ← 新增
 
     /**
      * Unserialize a specific backing store, identified by a section.

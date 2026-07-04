@@ -174,8 +174,8 @@ System::System(const Params &p)
       physProxy(_systemPort, p.cache_line_size),
       workload(p.workload),
       physmem(name() + ".physmem", p.memories, p.mmap_using_noreserve,
-              p.shared_backstore, p.auto_unlink_shared_backstore,
-              p.is_sparse_restore),
+              p.shared_backstore, p.restore_from_gcpt, p.gcpt_file,
+              p.auto_unlink_shared_backstore, p.is_sparse_restore),
       memoryMode(p.mem_mode),
       _cacheLineSize(p.cache_line_size),
       numWorkIds(p.num_work_ids),
@@ -543,6 +543,16 @@ System::getRequestorName(RequestorID requestor_id)
 
     const auto& requestor_info = requestors[requestor_id];
     return requestor_info.req_name;
+}
+
+void
+System::initState()
+{
+    SimObject::initState();
+
+    if (physmem.tryRestoreFromXSCpt()) {
+        inform("Restored from Xiangshan RISC-V Checkpoint\n");
+    }
 }
 
 } // namespace gem5

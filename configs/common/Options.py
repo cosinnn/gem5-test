@@ -833,6 +833,12 @@ def addFSOptions(parser):
             "switches and dump tasks file (required for Streamline)",
         )
         parser.add_argument("--vio-9p", action="store_true", help=vio_9p_help)
+    if buildEnv["USE_RISCV_ISA"]:
+        parser.add_argument("--generic-rv-cpt", action="store", type=str,
+                            default=None,
+                            help="The path of Xiangshan risc-v checkpoint")
+        parser.add_argument("--raw-cpt", action="store_true",
+                            help="The checkpoint file is not gz but binary")
 
     # Benchmark options
     parser.add_argument(

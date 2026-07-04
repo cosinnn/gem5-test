@@ -736,6 +736,12 @@ def makeBareMetalRiscvSystem(mem_mode, mdesc=None, cmdline=None):
 
     self.system_port = self.membus.cpu_side_ports
     return self
+    
+def makeBareMetalXSCptSystem(mem_mode, mdesc=None, cmdline=None):
+    self = makeBareMetalRiscvSystem(mem_mode, mdesc, cmdline)
+    # checkpoint binary expects memory starting at 0x80000000
+    self.mem_ranges = [AddrRange(start=0x80000000, size=mdesc.mem())]
+    return self
 
 
 def makeDualRoot(full_system, testSystem, driveSystem, dumpfile):

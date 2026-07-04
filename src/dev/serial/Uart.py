@@ -83,3 +83,11 @@ class RiscvUart8250(Uart8250):
         node.append(FdtPropertyWords("interrupt-parent", state.phandle(plic)))
         node.appendCompatible(["ns8250", "ns16550a"])
         yield node
+
+
+class UartLite(BasicPioDevice):
+    type = 'UartLite'
+    cxx_header = "dev/serial/uartlite.hh"
+    cxx_class = 'gem5::UartLite'
+    pio_addr = 0x40600000
+    pio_size = Param.Addr(0xd, "Size of address range")

@@ -115,6 +115,13 @@ class System(SimObject):
         "preventing physical memory allocation for unused guest regions.",
     )
 
+    restore_from_gcpt = Param.Bool(
+        False, "Restoring from Xiangshan gcpt"
+    )
+    gcpt_file = Param.String(
+        "", "Xiangshan checkpoint image file"
+    )
+    
     cache_line_size = Param.Unsigned(64, "Cache line size in bytes")
 
     redirect_paths = VectorParam.RedirectPath([], "Path redirections")

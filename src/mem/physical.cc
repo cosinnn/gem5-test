@@ -81,6 +81,8 @@ PhysicalMemory::PhysicalMemory(const std::string &_name,
                                const std::vector<AbstractMemory *> &_memories,
                                bool mmap_using_noreserve,
                                const std::string &shared_backstore,
+                               bool restore_from_gcpt,
+                               const std::string &gcpt_path,
                                bool auto_unlink_shared_backstore,
                                bool is_sparse_restore)
     : _name(_name),
@@ -89,7 +91,9 @@ PhysicalMemory::PhysicalMemory(const std::string &_name,
       sharedBackstore(shared_backstore),
       sharedBackstoreSize(0),
       pageSize(sysconf(_SC_PAGE_SIZE)),
-      isSparseRestore(is_sparse_restore)
+      isSparseRestore(is_sparse_restore),
+      restoreFromXiangshanCpt(restore_from_gcpt),
+      xsCptPath(gcpt_path)
 {
     // Register cleanup callback if requested.
     if (auto_unlink_shared_backstore && !sharedBackstore.empty()) {
@@ -553,6 +557,41 @@ PhysicalMemory::unserializeStore(CheckpointIn &cp)
     if (gzclose(compressed_mem))
         fatal("Close failed on physical memory checkpoint file '%s'\n",
               filename);
+}
+
+bool
+PhysicalMemory::tryRestoreFromXSCpt()
+{
+    if (!restoreFromXiangshanCpt) {
+        return false;
+    }
+
+    int fd = open(xsCptPath.c_str(), O_RDONLY);
+    fatal_if(fd < 0,
+             "Failed to open checkpoint file %s.\n"
+             "This error typically occurs when the file path specified is "
+             "incorrect.\n",
+             xsCptPath.c_str());
+
+    off_t off = lseek(fd, 0, SEEK_END);
+    fatal_if(off < 0, "Failed to determine size of file %s.\n",
+             xsCptPath.c_str());
+    auto file_len = static_cast<size_t>(off);
+
+    lseek(fd, 0, SEEK_SET);
+    auto bytes = read(fd, backingStore[0].pmem, file_len);
+    fatal_if(bytes != static_cast<ssize_t>(file_len),
+             "Failed to read checkpoint file %s: read %ld, expected %lu\n",
+             xsCptPath.c_str(), bytes, file_len);
+
+    inform("Restored from raw checkpoint file %s, %lu bytes\n",
+           xsCptPath.c_str(), file_len);
+    inform("First 4 bytes are 0x%x 0x%x 0x%x 0x%x\n",
+           backingStore[0].pmem[0], backingStore[0].pmem[1],
+           backingStore[0].pmem[2], backingStore[0].pmem[3]);
+
+    close(fd);
+    return true;
 }
 
 } // namespace memory

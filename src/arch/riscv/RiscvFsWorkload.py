@@ -53,6 +53,7 @@ class RiscvBareMetal(Workload):
         "Use bootloader entry point as reset vector. "
         "If `auto_reset_vect` is true, the `reset_vect` parameter is ignored.",
     )
+    xiangshan_cpt = Param.Bool(False, "Using Xiangshan checkpoint")
 
 
 class RiscvLinux(KernelWorkload):

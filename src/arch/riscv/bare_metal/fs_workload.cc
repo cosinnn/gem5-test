@@ -42,19 +42,27 @@ namespace RiscvISA
 
 BareMetal::BareMetal(const Params &p) : Workload(p),
     _isBareMetal(p.bare_metal),
-    bootloader(loader::createObjectFile(p.bootloader)),
     semihosting(p.semihosting)
 {
-    fatal_if(!bootloader, "Could not load bootloader file %s.", p.bootloader);
-    bootloaderSymtab = bootloader->symtab();
+    if (!p.xiangshan_cpt) {
+        bootloader = loader::createObjectFile(p.bootloader);
+        fatal_if(!bootloader, "Could not load bootloader file %s.",
+                 p.bootloader);
+        bootloaderSymtab = bootloader->symtab();
 
-    if (p.auto_reset_vect) {
-        _resetVect = bootloader->entryPoint();
+        if (p.auto_reset_vect) {
+            _resetVect = bootloader->entryPoint();
+        } else {
+            _resetVect = p.reset_vect;
+        }
+
+        loader::debugSymbolTable.insert(bootloaderSymtab);
     } else {
-        _resetVect = p.reset_vect;
+        bootloader = nullptr;
+        _resetVect = 0x80000000;
+        inform("No bootload provided, because using XS GCPT, reset to %#lx\n",
+               _resetVect);
     }
-
-    loader::debugSymbolTable.insert(bootloaderSymtab);
 }
 
 BareMetal::~BareMetal()
@@ -67,8 +75,10 @@ BareMetal::initState()
 {
     Workload::initState();
 
-    warn_if(!bootloader->buildImage().write(system->physProxy),
-            "Could not load sections to memory.");
+    if (bootloader) {
+        warn_if(!bootloader->buildImage().write(system->physProxy),
+                "Could not load sections to memory.");
+    }
 
     for (auto *tc: system->threads) {
         tc->getIsaPtr()->resetThread();

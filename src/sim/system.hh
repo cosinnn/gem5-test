@@ -505,6 +505,7 @@ class System : public SimObject, public PCEventScope
   public:
 
     void regStats() override;
+    void initState() override;
     /**
      * Called by pseudo_inst to track the number of work items started by this
      * system.
