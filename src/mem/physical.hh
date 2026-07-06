@@ -192,6 +192,11 @@ class PhysicalMemory : public Serializable
                             bool conf_table_reported, bool in_addr_map,
                             bool kvm_map);
 
+    void unserializeFromGz(std::string filepath, unsigned store_id,
+                           long range_size);
+    void unserializeFromZstd(std::string filepath, unsigned store_id,
+                             long range_size);
+
   public:
 
     /**
@@ -305,6 +310,10 @@ class PhysicalMemory : public Serializable
     void unserialize(CheckpointIn &cp) override;
     
     bool tryRestoreFromXSCpt();        // ← 新增
+
+    void unserializeStoreFrom(std::string filepath, unsigned store_id,
+                              long range_size);
+    void unserializeStoreFromFile(std::string filepath);
 
     /**
      * Unserialize a specific backing store, identified by a section.

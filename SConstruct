@@ -884,7 +884,13 @@ for variant_path in variant_paths:
                                        call='zlibVersion();'):
             error('Did not find needed zlib compression library '
                   'and/or zlib.h header file.\n'
-                  'Please install zlib and try again.')
+                   'Please install zlib and try again.')
+
+        if not conf.CheckLibWithHeader('zstd', 'zstd.h', 'C++',
+                                       call='ZSTD_isError(0);'):
+            error('Did not find needed zstd compression library '
+                  'and/or zstd.h header file.\n'
+                  'Please install zstd and try again.')
 
     if not GetOption('without_tcmalloc'):
         with gem5_scons.Configure(env) as conf:

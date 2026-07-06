@@ -50,6 +50,13 @@ namespace gem5
 namespace RiscvISA
 {
 
+constexpr auto XLEN = sizeof(RegVal) * 8;
+constexpr unsigned NumVecElemPerVecReg = 2;
+using VecElem = uint64_t;
+constexpr size_t VLENB = NumVecElemPerVecReg * sizeof(VecElem);
+constexpr size_t VLEN = VLENB * 8;
+constexpr uint32_t ELEN = sizeof(VecElem) * 8;
+
 typedef uint32_t MachInst;
 
 // This should be further extend someday when we start to support 64b+ inst.

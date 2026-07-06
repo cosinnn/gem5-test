@@ -43,6 +43,7 @@
 #include <sys/user.h>
 #include <unistd.h>
 #include <zlib.h>
+#include <zstd.h>
 
 #include <algorithm>
 #include <cerrno>
@@ -489,8 +490,6 @@ PhysicalMemory::unserialize(CheckpointIn &cp)
 void
 PhysicalMemory::unserializeStore(CheckpointIn &cp)
 {
-    const uint32_t chunk_size = 16384;
-
     unsigned int store_id;
     UNSERIALIZE_SCALAR(store_id);
 
@@ -498,65 +497,278 @@ PhysicalMemory::unserializeStore(CheckpointIn &cp)
     UNSERIALIZE_SCALAR(filename);
     std::string filepath = cp.getCptDir() + "/" + filename;
 
-    // mmap memoryfile
-    gzFile compressed_mem = gzopen(filepath.c_str(), "rb");
-    if (compressed_mem == NULL)
-        fatal("Can't open physical memory checkpoint file '%s'", filename);
-
-    // we've already got the actual backing store mapped
-    uint8_t* pmem = backingStore[store_id].pmem;
-    AddrRange range = backingStore[store_id].range;
-
-    Addr range_size;
+    long range_size;
     UNSERIALIZE_SCALAR(range_size);
 
-    DPRINTF(Checkpoint, "Unserializing physical memory %s with size %d\n",
-            filename, range_size);
+    unserializeStoreFrom(filepath, store_id, range_size);
+}
 
-    if (range_size != range.size())
-        fatal("Memory range size has changed! Saw %lld, expected %lld\n",
-              range_size, range.size());
+static bool
+hasGzipMagic(int fd)
+{
+    uint8_t buf[2] = {0};
+    size_t sz = pread(fd, buf, 2, 0);
+    panic_if(sz != 2, "Couldn't read magic bytes from object file");
+    return ((buf[0] == 0x1f) && (buf[1] == 0x8b));
+}
 
-    uint64_t curr_size = 0;
-    uint32_t bytes_read;
-    if (isSparseRestore) {
-        static_assert(chunk_size >= 4096 && (chunk_size % 4096 == 0),
-                      "chunk_size must be a multiple of the 4KB page size");
-        static_assert(
-            chunk_size <= 65536,
-            "chunk_size too large, smaller chunks improve sparse efficiency");
+static bool
+hasZSTDMagic(int fd)
+{
+    uint8_t buf[4];
+    size_t sz = pread(fd, buf, 4, 0);
+    panic_if(sz != 4, "Couldn't read magic bytes from object file");
+    const uint8_t zstd_magic[4] = {0x28, 0xB5, 0x2F, 0xFD};
+    return memcmp(buf, zstd_magic, 4) == 0;
+}
 
-        uint8_t buffer[chunk_size];
-        uint8_t zeros[chunk_size] = {0};
-        while (curr_size < range.size()) {
-            bytes_read = gzread(compressed_mem, buffer, chunk_size);
-            if (bytes_read == 0) {
-                break;
-            }
+void
+PhysicalMemory::unserializeStoreFromFile(std::string filepath)
+{
+    warn("Unserializing physical memory from file %s\n", filepath.c_str());
+    unserializeStoreFrom(filepath, 0, 0);
+}
 
-            bool all_zero = (memcmp(buffer, zeros, bytes_read) == 0);
+void
+PhysicalMemory::unserializeStoreFrom(std::string filepath,
+        unsigned store_id, long range_size)
+{
+    int fd = open(filepath.c_str(), O_RDONLY);
+    fatal_if(fd < 0,
+                "Failed to open file %s.\n"
+                "This error typically occurs when the file path specified is "
+                "incorrect.\n",
+                filepath);
 
-            if (!all_zero) {
-                memcpy(pmem, buffer, bytes_read);
-            }
+    bool is_gz = hasGzipMagic(fd);
+    bool is_zstd = hasZSTDMagic(fd);
+    close(fd);
 
-            curr_size += bytes_read;
-            pmem += bytes_read;
-        }
+    if (is_gz) {
+        unserializeFromGz(filepath, store_id, range_size);
+    } else if (is_zstd) {
+        unserializeFromZstd(filepath, store_id, range_size);
     } else {
-        while (curr_size < range.size()) {
-            bytes_read = gzread(compressed_mem, pmem, chunk_size);
-            if (bytes_read == 0) {
-                break;
-            }
-            curr_size += bytes_read;
-            pmem += bytes_read;
+        fd = open(filepath.c_str(), O_RDONLY);
+        fatal_if(fd < 0,
+                 "Failed to open file %s.\n"
+                 "This error typically occurs when the file path specified is "
+                 "incorrect.\n",
+                 filepath);
+        off_t off = lseek(fd, 0, SEEK_END);
+        fatal_if(off < 0, "Failed to determine size of file %s.\n", filepath);
+        auto file_len = static_cast<size_t>(off);
+
+        lseek(fd, 0, SEEK_SET);
+        auto bytes = read(fd, backingStore[store_id].pmem, file_len);
+        fatal_if(bytes != static_cast<ssize_t>(file_len),
+                 "Failed to read checkpoint file %s: read %ld, expected %lu\n",
+                 filepath.c_str(), bytes, file_len);
+
+        inform("Restored from raw checkpoint file %s, %lu bytes\n",
+               filepath.c_str(), file_len);
+        inform("First 4 bytes are 0x%x 0x%x 0x%x 0x%x\n",
+               backingStore[store_id].pmem[0], backingStore[store_id].pmem[1],
+               backingStore[store_id].pmem[2], backingStore[store_id].pmem[3]);
+
+        close(fd);
+    }
+}
+
+void
+PhysicalMemory::unserializeFromGz(std::string filepath,
+        unsigned store_id, long range_size)
+{
+    gzFile compressed_mem = gzopen(filepath.c_str(), "rb");
+
+    if (compressed_mem == nullptr)
+        fatal("Can't open checkpoint file '%s'", filepath.c_str());
+
+    uint8_t* pmem = backingStore[store_id].pmem;
+    AddrRange range = backingStore[store_id].range;
+    assert(pmem);
+
+    if (range_size != 0) {
+        DPRINTF(Checkpoint, "Unserializing physical memory %s with size %d\n",
+                filepath.c_str(), range_size);
+
+        if (range_size != (long)range.size()) {
+            fatal("Memory range size has changed! Saw %lld, expected %lld\n",
+                  range_size, range.size());
         }
     }
 
+    uint64_t curr_size = 0;
+    const uint32_t chunk_size = 16384;
+    long* temp_page = new long[chunk_size];
+    assert(temp_page);
+    long* pmem_current;
+    uint32_t bytes_read;
+
+    while (curr_size < range.size()) {
+        bytes_read = gzread(compressed_mem, temp_page, chunk_size);
+        if (bytes_read == 0)
+            break;
+
+        assert(bytes_read % sizeof(long) == 0);
+
+        for (uint32_t x = 0; x < bytes_read / sizeof(long); x++) {
+            if (*(temp_page + x) != 0) {
+                pmem_current = (long*)(pmem + curr_size + x * sizeof(long));
+                *pmem_current = *(temp_page + x);
+            }
+        }
+        curr_size += bytes_read;
+    }
+
+    delete[] temp_page;
+
     if (gzclose(compressed_mem))
         fatal("Close failed on physical memory checkpoint file '%s'\n",
-              filename);
+              filepath.c_str());
+}
+
+void
+PhysicalMemory::unserializeFromZstd(std::string filepath,
+        unsigned store_id, long range_size)
+{
+    uint8_t* pmem = backingStore[store_id].pmem;
+    AddrRange range = backingStore[store_id].range;
+
+    auto fd = open(filepath.c_str(), O_RDONLY);
+    if (fd < 0) {
+        fatal("Cannot open compressed file %s\n", filepath.c_str());
+    }
+
+    auto file_size = lseek(fd, 0, SEEK_END);
+    if (file_size < 0) {
+        close(fd);
+        fatal("Failed to determine size of compressed file %s\n",
+              filepath.c_str());
+    }
+    if (file_size == 0) {
+        close(fd);
+        fatal("File size is zero\n");
+    }
+    lseek(fd, 0, SEEK_SET);
+    warn("Read zstd file size %lu\n", file_size);
+
+    const size_t compress_file_buffer_size = ZSTD_DStreamInSize();
+    auto compress_file_buffer =
+        static_cast<uint8_t*>(malloc(compress_file_buffer_size));
+    if (!compress_file_buffer) {
+        close(fd);
+        fatal("Compress file buffer create failed\n");
+    }
+
+    ZSTD_inBuffer input = {compress_file_buffer, 0, 0};
+
+    const uint32_t decompress_file_buffer_size = 16384;
+    uint64_t* decompress_file_buffer =
+        (uint64_t*)calloc(decompress_file_buffer_size, sizeof(long));
+    if (!decompress_file_buffer) {
+        free(compress_file_buffer);
+        close(fd);
+        fatal("Decompress file creating failed\n");
+    }
+
+    ZSTD_DStream* dstream = ZSTD_createDStream();
+    if (!dstream) {
+        free(compress_file_buffer);
+        free(decompress_file_buffer);
+        close(fd);
+        fatal("Cannot create zstd dstream object\n");
+    }
+
+    size_t init_result = ZSTD_initDStream(dstream);
+    if (ZSTD_isError(init_result)) {
+        ZSTD_freeDStream(dstream);
+        free(compress_file_buffer);
+        free(decompress_file_buffer);
+        close(fd);
+        fatal("Cannot init dstream object: %s\n",
+              ZSTD_getErrorName(init_result));
+    }
+
+    uint64_t* pmem_current;
+    uint64_t total_write_size = 0;
+    uint64_t non_zero_dword = 0;
+    size_t last_result = 1;
+
+    while (true) {
+        ssize_t bytes_read = 0;
+        do {
+            bytes_read = read(fd, compress_file_buffer,
+                              compress_file_buffer_size);
+        } while (bytes_read < 0 && errno == EINTR);
+
+        if (bytes_read < 0) {
+            ZSTD_freeDStream(dstream);
+            free(compress_file_buffer);
+            free(decompress_file_buffer);
+            close(fd);
+            fatal("Compress file read failed\n");
+        }
+
+        if (bytes_read == 0) {
+            break;
+        }
+
+        input.src = compress_file_buffer;
+        input.size = static_cast<size_t>(bytes_read);
+        input.pos = 0;
+
+        while (input.pos < input.size) {
+            ZSTD_outBuffer output = {
+                decompress_file_buffer,
+                decompress_file_buffer_size * sizeof(long),
+                0
+            };
+            last_result = ZSTD_decompressStream(dstream, &output, &input);
+            if (ZSTD_isError(last_result)) {
+                ZSTD_freeDStream(dstream);
+                free(compress_file_buffer);
+                free(decompress_file_buffer);
+                close(fd);
+                fatal("Decompress failed: %s\n",
+                      ZSTD_getErrorName(last_result));
+            }
+
+            if (total_write_size + output.pos > range.size()) {
+                ZSTD_freeDStream(dstream);
+                free(compress_file_buffer);
+                free(decompress_file_buffer);
+                close(fd);
+                fatal("Decompress failed: No error detected. "
+                      "Binary size is larger than memory!\n");
+            }
+
+            for (uint64_t x = 0; x < output.pos; x += sizeof(long)) {
+                uint64_t read_data =
+                    *(decompress_file_buffer + x / sizeof(long));
+                if (read_data != 0) {
+                    pmem_current = (uint64_t*)(pmem + total_write_size + x);
+                    *pmem_current = read_data;
+                    non_zero_dword++;
+                }
+            }
+            total_write_size += output.pos;
+        }
+    }
+    warn("Total write non-zero bytes: %lu\n", non_zero_dword * 8);
+
+    if (last_result != 0) {
+        ZSTD_freeDStream(dstream);
+        free(compress_file_buffer);
+        free(decompress_file_buffer);
+        close(fd);
+        fatal("Decompress failed: unexpected end of compressed input\n");
+    }
+
+    ZSTD_freeDStream(dstream);
+    free(compress_file_buffer);
+    free(decompress_file_buffer);
+    close(fd);
 }
 
 bool
@@ -565,32 +777,7 @@ PhysicalMemory::tryRestoreFromXSCpt()
     if (!restoreFromXiangshanCpt) {
         return false;
     }
-
-    int fd = open(xsCptPath.c_str(), O_RDONLY);
-    fatal_if(fd < 0,
-             "Failed to open checkpoint file %s.\n"
-             "This error typically occurs when the file path specified is "
-             "incorrect.\n",
-             xsCptPath.c_str());
-
-    off_t off = lseek(fd, 0, SEEK_END);
-    fatal_if(off < 0, "Failed to determine size of file %s.\n",
-             xsCptPath.c_str());
-    auto file_len = static_cast<size_t>(off);
-
-    lseek(fd, 0, SEEK_SET);
-    auto bytes = read(fd, backingStore[0].pmem, file_len);
-    fatal_if(bytes != static_cast<ssize_t>(file_len),
-             "Failed to read checkpoint file %s: read %ld, expected %lu\n",
-             xsCptPath.c_str(), bytes, file_len);
-
-    inform("Restored from raw checkpoint file %s, %lu bytes\n",
-           xsCptPath.c_str(), file_len);
-    inform("First 4 bytes are 0x%x 0x%x 0x%x 0x%x\n",
-           backingStore[0].pmem[0], backingStore[0].pmem[1],
-           backingStore[0].pmem[2], backingStore[0].pmem[3]);
-
-    close(fd);
+    unserializeStoreFromFile(xsCptPath);
     return true;
 }
 
