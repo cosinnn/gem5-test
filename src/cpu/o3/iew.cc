@@ -92,6 +92,8 @@ std::string IEW::IEWStats::statusStrings[ThreadStatusMax] = {
 IEW::IEW(CPU *_cpu, const BaseO3CPUParams &params)
     : issueToExecQueue(params.backComSize, params.forwardComSize),
       cpu(_cpu),
+      valuePred(params.valuePred),
+      enableSelectiveVPFlush(params.enableSelectiveVPFlush),
       instQueue(_cpu, this, params),
       ldstQueue(_cpu, this, params),
       commitToIEWDelay(params.commitToIEWDelay),
@@ -572,6 +574,20 @@ void
 IEW::wakeDependents(const DynInstPtr& inst)
 {
     instQueue.wakeDependents(inst);
+}
+
+void
+IEW::lvpWakeDependents(const DynInstPtr &inst)
+{
+    assert(inst->numDestRegs() == 1);
+    for (int i = 0; i < inst->numDestRegs(); i++) {
+        auto dest = inst->renamedDestIdx(i);
+        DPRINTF(IEW,
+                "[ValuePred-IEW-Dispatch] Seq:%lu PC:%#lx | "
+                "lvpWakeDependents: scoreboard SET mode\n",
+                inst->seqNum, inst->pcState().instAddr());
+        scoreboard->setReg(dest);
+    }
 }
 
 void
@@ -1099,6 +1115,17 @@ IEW::dispatchInsts(ThreadID tid)
         // instruction.
         if (add_to_iq) {
             instQueue.insert(inst);
+
+            // Value prediction: speculatively wake dependents at dispatch
+            if (valuePred && inst->vpSupported &&
+                inst->vpResult.speculative) {
+                DPRINTF(IEW,
+                        "[ValuePred-IEW-Dispatch] Tid:%i Seq:%lu PC:%#lx | "
+                        "vpLoad dispatch, calling lvpWakeDependents\n",
+                        tid, inst->seqNum,
+                        inst->pcState().instAddr());
+                lvpWakeDependents(inst);
+            }
         }
 
         insts_to_dispatch.pop();
@@ -1419,6 +1446,23 @@ IEW::writebackInsts()
         // when it's ready to execute the strictly ordered load.
         if (!inst->isSquashed() && inst->isExecuted() &&
                 inst->getFault() == NoFault) {
+            // Value prediction: log correct/misprediction
+            if (inst->vpResult.speculative) {
+                if (inst->vpMisprediction) {
+                    DPRINTF(IEW,
+                            "[ValuePred-IEW-Writeback] Seq:%lu PC:%#lx | "
+                            "VP_MISPREDICTION! predicted=%#lx actual=%#lx\n",
+                            inst->seqNum, inst->pcState().instAddr(),
+                            inst->vpResult.value, inst->actualValue);
+                } else {
+                    DPRINTF(IEW,
+                            "[ValuePred-IEW-Writeback] Seq:%lu PC:%#lx | "
+                            "VP_CORRECT! predicted=%#lx actual=%#lx\n",
+                            inst->seqNum, inst->pcState().instAddr(),
+                            inst->vpResult.value, inst->actualValue);
+                }
+            }
+
             int dependents = instQueue.wakeDependents(inst);
 
             for (int i = 0; i < inst->numDestRegs(); i++) {

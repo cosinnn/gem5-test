@@ -1,0 +1,75 @@
+warn: Base 10 memory/cache size 512MB will be cast to base 2 size 512MiB.
+warn: Base 10 memory/cache size 512MB will be cast to base 2 size 512MiB.
+Global frequency set at 1000000000000 ticks per second
+warn: No dot file generated. Please install pydot to generate the dot file and pdf.
+src/arch/riscv/bare_metal/fs_workload.cc:63: info: No bootload provided, because using XS GCPT, reset to 0x80000000
+src/arch/riscv/isa.cc:321: info: RVV enabled, VLEN = 256 bits, ELEN = 64 bits
+src/base/statistics.hh:279: warn: One of the stats is a legacy stat. Legacy stat is a stat that does not belong to any statistics::Group. Legacy stat is deprecated.
+src/cpu/base.cc:254: warn: difftest hart id set to 0 for tid 0
+Using /home/cosin/xs-gem5/NEMU/build/riscv64-nemu-interpreter-so for difftest
+src/cpu/base.cc:265: warn: Difftest is enabled with ref so: /home/cosin/xs-gem5/NEMU/build/riscv64-nemu-interpreter-so.
+      0: system.rtc: Real-time clock set to Sun Jan  1 00:00:00 2012
+src/dev/riscv/clint.cc:202: warn: Set Clint to RiscvSystem failed.
+system.remote_gdb: Listening for connections on port 7000
+src/mem/physical.cc:528: warn: Unserializing physical memory from file /tmp/cpt_output_gz/test/coremark/50000/_50003_memory_.gz
+src/sim/system.cc:554: info: Restored from Xiangshan RISC-V Checkpoint
+gem5 Simulator System.  https://www.gem5.org
+gem5 is copyrighted software; use the --copyright option for details.
+
+gem5 version DEVELOP-FOR-25.1
+gem5 compiled Jul  6 2026 15:05:01
+gem5 started Jul  6 2026 15:06:25
+gem5 executing on LAPTOP-24Q5MFT6, pid 1224012
+command line: ./build/RISCV/gem5.opt configs/example/xs_cpt.py --generic-rv-cpt=/tmp/cpt_output_gz/test/coremark/50000/_50003_memory_.gz --enable-difftest
+
+Obtained ref_so: /home/cosin/xs-gem5/NEMU/build/riscv64-nemu-interpreter-so
+src/dev/serial/uartlite.cc:35: warn: Write to other uartlite addr 12 is not implemented
+Running CoreMark for 2 iterations
+2K performance run parameters for coremark.
+CoreMark Size    : 666
+Total time (ms)  : 40028
+Iterations       : 2
+Compiler version : GCC13.2.0
+seedcrc          : 0xe9f5
+[0]crclist       : 0xe714
+[0]crcmatrix     : 0x1fd7
+[0]crcstate      : 0x8e3a
+[0]crcfinal      : 0x72be
+Finished in 40028 ms.
+==================================================
+CoreMark Iterations/Sec 49
+src/cpu/simple/timing.cc:830: panic: panic condition pkt && pkt->isError() occurred: Instruction fetch ([0:0x4]) failed: BadAddressError [0:3] IF
+Memory Usage: 10372640 KBytes
+Panic at tick 41824433000
+Program aborted at tick 41824433000
+--- BEGIN LIBC BACKTRACE ---
+./build/RISCV/gem5.opt(_ZN4gem515print_backtraceEv+0x2b) [0x59f0346411eb]
+./build/RISCV/gem5.opt(_ZN4gem512abortHandlerEi+0x4c) [0x59f03466b69c]
+/usr/lib/x86_64-linux-gnu/libc.so.6(+0x45cb0) [0x7befee245cb0]
+/usr/lib/x86_64-linux-gnu/libc.so.6(pthread_kill+0x11c) [0x7befee2a648c]
+/usr/lib/x86_64-linux-gnu/libc.so.6(gsignal+0x1e) [0x7befee245b7e]
+/usr/lib/x86_64-linux-gnu/libc.so.6(abort+0x27) [0x7befee2288ec]
+./build/RISCV/gem5.opt(+0x1307105) [0x59f03334a105]
+./build/RISCV/gem5.opt(_ZN4gem515TimingSimpleCPU14completeIfetchEPNS_6PacketE+0x69a) [0x59f03349b2ca]
+./build/RISCV/gem5.opt(_ZN4gem510EventQueue10serviceOneEv+0x145) [0x59f0346593c5]
+./build/RISCV/gem5.opt(_ZN4gem59doSimLoopEPNS_10EventQueueE+0x68) [0x59f03468ccd8]
+./build/RISCV/gem5.opt(_ZN4gem58simulateEm+0x26b) [0x59f03468d3bb]
+./build/RISCV/gem5.opt(+0x1d6385f) [0x59f033da685f]
+./build/RISCV/gem5.opt(+0x1321471) [0x59f033364471]
+/usr/lib/x86_64-linux-gnu/libpython3.14.so.1.0(+0x18d105) [0x7befef18d105]
+/usr/lib/x86_64-linux-gnu/libpython3.14.so.1.0(PyObject_Call+0xab) [0x7befef1271bb]
+/usr/lib/x86_64-linux-gnu/libpython3.14.so.1.0(_PyEval_EvalFrameDefault+0x681f) [0x7befef28725f]
+/usr/lib/x86_64-linux-gnu/libpython3.14.so.1.0(+0x2941a5) [0x7befef2941a5]
+/usr/lib/x86_64-linux-gnu/libpython3.14.so.1.0(PyEval_EvalCode+0xd6) [0x7befef2791c6]
+/usr/lib/x86_64-linux-gnu/libpython3.14.so.1.0(+0x27a819) [0x7befef27a819]
+/usr/lib/x86_64-linux-gnu/libpython3.14.so.1.0(PyObject_Vectorcall+0x5e) [0x7befef124cde]
+/usr/lib/x86_64-linux-gnu/libpython3.14.so.1.0(_PyEval_EvalFrameDefault+0x4fa0) [0x7befef2859e0]
+/usr/lib/x86_64-linux-gnu/libpython3.14.so.1.0(+0x2940f7) [0x7befef2940f7]
+./build/RISCV/gem5.opt(+0x1d3de64) [0x59f033d80e64]
+./build/RISCV/gem5.opt(main+0x22b) [0x59f032f933cb]
+/usr/lib/x86_64-linux-gnu/libc.so.6(+0x2a601) [0x7befee22a601]
+/usr/lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0x88) [0x7befee22a718]
+./build/RISCV/gem5.opt(_start+0x25) [0x59f033342d75]
+--- END LIBC BACKTRACE ---
+For more info on how to address this issue, please visit https://www.gem5.org/documentation/general_docs/common-errors/ 
+

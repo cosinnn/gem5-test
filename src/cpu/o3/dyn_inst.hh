@@ -54,6 +54,7 @@
 #include "cpu/inst_res.hh"
 #include "cpu/inst_seq.hh"
 #include "cpu/o3/dyn_inst_ptr.hh"
+#include "cpu/valuepred/valuepred_metadata.hh"
 #include "cpu/o3/lsq_unit.hh"
 #include "cpu/op_class.hh"
 #include "cpu/reg_class.hh"
@@ -558,6 +559,18 @@ class DynInst : public ExecContext, public RefCounted
     bool isInteger()      const { return staticInst->isInteger(); }
     bool isFloating()     const { return staticInst->isFloating(); }
     bool isVector()       const { return staticInst->isVector(); }
+    bool canLVP()         const { return isLoad() && !isVector(); }
+
+    /** Read the result value (for VP actual value capture). */
+    RegVal readIntResult() const {
+        if (!instResult.empty()) {
+            auto &res = instResult.front();
+            if (res.isValid())
+                return res.asRegVal();
+        }
+        return 0xdeadbeefULL;
+    }
+
     bool isControl()      const { return staticInst->isControl(); }
     bool isCall()         const { return staticInst->isCall(); }
     bool isReturn()       const { return staticInst->isReturn(); }
@@ -981,6 +994,12 @@ class DynInst : public ExecContext, public RefCounted
     uint64_t htmDepth = 0;
 
   public:
+    // Value prediction fields
+    valuepred::VPResult vpResult{false, 0xdeadbeefULL};
+    RegVal actualValue = 0xdeadbeefULL;
+    bool vpMisprediction = false;
+    bool vpSupported = false;
+
     // Value -1 indicates that particular phase
     // hasn't happened (yet).
     /** Tick records used for the pipeline activity viewer. */

@@ -52,6 +52,7 @@
 #include "cpu/o3/free_list.hh"
 #include "cpu/o3/iew.hh"
 #include "cpu/o3/limits.hh"
+#include "cpu/valuepred/valuepred_unit.hh"
 #include "cpu/timebuf.hh"
 #include "sim/probe/probe.hh"
 
@@ -371,6 +372,10 @@ class Rename
 
     /** Pointer to the scoreboard. */
     Scoreboard *scoreboard;
+
+    /** Value prediction unit. */
+    valuepred::VPUnit *valuePred;
+    bool enableSelectiveVPFlush;
 
     /** Count of instructions in progress that have been sent off to the IQ
      * and ROB, but are not yet included in their occupancy counts.

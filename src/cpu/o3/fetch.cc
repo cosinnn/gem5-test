@@ -115,6 +115,7 @@ Fetch::IcachePort::IcachePort(Fetch *_fetch, CPU *_cpu) :
 Fetch::Fetch(CPU *_cpu, const BaseO3CPUParams &params)
     : fetchPolicy(params.smtFetchPolicy),
       cpu(_cpu),
+      valuePred(params.valuePred),
       bac(nullptr),
       ftq(nullptr),
       decoupledFrontEnd(params.decoupledFrontEnd),
@@ -1297,6 +1298,34 @@ Fetch::fetch(bool &status_change)
                 DPRINTF(Fetch, "Branch detected with PC = %s -> targ: %s, \n",
                         this_pc, *next_pc);
                 ++fetchStats.predictedBranches;
+            }
+
+            // Value prediction: predict load values at fetch time
+            if (valuePred && instruction->canLVP()) {
+                DPRINTF(Fetch,
+                        "[ValuePred-Fetch] Tid:%i Seq:%lu PC:%#lx | "
+                        "canLVP=true, invoking valuePredict\n",
+                        tid, instruction->seqNum,
+                        instruction->pcState().instAddr());
+
+                valuepred::VPPredMetaData* vpPredMetaData =
+                    valuepred::VPDataStructFactory::buildPredMetaData(
+                        valuePred->getValuePredictorType());
+
+                vpPredMetaData->pc = instruction->pcState().instAddr();
+                vpPredMetaData->seq_no = instruction->seqNum;
+                vpPredMetaData->tid = tid;
+                instruction->vpResult = valuePred->valuePredict(vpPredMetaData);
+
+                DPRINTF(Fetch,
+                        "[ValuePred-Fetch] Tid:%i Seq:%lu PC:%#lx | "
+                        "result: speculative=%s, value=%#lx\n",
+                        tid, instruction->seqNum,
+                        instruction->pcState().instAddr(),
+                        instruction->vpResult.speculative ? "YES" : "NO",
+                        instruction->vpResult.value);
+
+                delete vpPredMetaData;
             }
 
             newMacro |= this_pc.instAddr() != next_pc->instAddr();

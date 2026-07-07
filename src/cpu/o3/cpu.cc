@@ -81,6 +81,7 @@ CPU::CPU(const BaseO3CPUParams &params)
 #endif
       removeInstsThisCycle(false),
       bac(this, params),
+      valuePred(params.valuePred),
       ftq(this, params),
       fetch(this, params),
       decode(this, params),
@@ -1501,6 +1502,54 @@ CPU::htmSendAbortSignal(ThreadID tid, uint64_t htm_uid,
     if (!iew.ldstQueue.getDataPort().sendTimingReq(abort_pkt)) {
         panic("HTM abort signal was not sent to the memory subsystem.");
     }
+}
+
+RegVal
+CPU::diffReadMiscRegNoEffect(int misc_reg, ThreadID tid) const
+{
+    return readMiscRegNoEffect(misc_reg, tid);
+}
+
+RegVal
+CPU::diffReadMiscReg(int misc_reg, ThreadID tid)
+{
+    return readMiscReg(misc_reg, tid);
+}
+
+void
+CPU::diffSetMiscRegNoEffect(int misc_reg, RegVal val, ThreadID tid)
+{
+    setMiscRegNoEffect(misc_reg, val, tid);
+}
+
+void
+CPU::readGem5Regs(ThreadID tid)
+{
+    auto diffAllStates = this->diffAllStates[tid];
+    for (int i = 0; i < 32; i++) {
+        diffAllStates->gem5RegFile[i] = readArchIntReg(i, tid);
+        diffAllStates->gem5RegFile[i + 32] = readArchFloatReg(i, tid);
+    }
+}
+
+RegVal
+CPU::readArchIntReg(int reg_idx, ThreadID tid)
+{
+    const auto &regClasses = isa[tid]->regClasses();
+    PhysRegIdPtr phys_reg =
+        commitRenameMap[tid].lookup(
+            RegId(*regClasses[IntRegClass], (RegIndex)reg_idx));
+    return regFile.getReg(phys_reg);
+}
+
+RegVal
+CPU::readArchFloatReg(int reg_idx, ThreadID tid)
+{
+    const auto &regClasses = isa[tid]->regClasses();
+    PhysRegIdPtr phys_reg =
+        commitRenameMap[tid].lookup(
+            RegId(*regClasses[FloatRegClass], (RegIndex)reg_idx));
+    return regFile.getReg(phys_reg);
 }
 
 } // namespace o3

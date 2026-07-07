@@ -1,0 +1,17 @@
+Import('*')
+
+SimObject('ValuePredictor.py',
+          sim_objects=[
+            'ValuePredictor',
+            'IdealConstantLVP'
+          ],
+          enums=['ValuePredType'])
+
+Source('valuepred_unit.cc')
+Source('valuepred_metadata.cc')
+Source('ideal_constant_lvp.cc')
+
+DebugFlag('VPCOMMON')
+DebugFlag('IdealConstantLVP')
+
+CompoundFlag('VP', ['VPCOMMON', 'IdealConstantLVP'])

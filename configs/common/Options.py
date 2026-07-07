@@ -840,6 +840,21 @@ def addFSOptions(parser):
         parser.add_argument("--raw-cpt", action="store_true",
                             help="The checkpoint file is not gz but binary")
 
+    # Difftest option
+    parser.set_defaults(enable_difftest=None)
+    parser.add_argument("--enable-difftest",
+                        action="store_true",
+                        dest="enable_difftest",
+                        help="use NEMU as ref to do difftest")
+    parser.add_argument("--disable-difftest",
+                        action="store_false",
+                        dest="enable_difftest",
+                        help="disable NEMU difftest")
+    parser.add_argument("--difftest-ref-so",
+                        action="store",
+                        default=None,
+                        help="The shared lib file used to do difftest")
+
     # Benchmark options
     parser.add_argument(
         "--dual",

@@ -54,6 +54,7 @@
 #include "cpu/o3/rob.hh"
 #include "cpu/timebuf.hh"
 #include "enums/CommitPolicy.hh"
+#include "cpu/valuepred/valuepred_unit.hh"
 #include "sim/probe/probe.hh"
 
 namespace gem5
@@ -346,6 +347,9 @@ class Commit
     /** Pointer to O3CPU. */
     CPU *cpu;
 
+    /** Value prediction unit. */
+    valuepred::VPUnit *valuePred;
+
     /** Vector of all of the threads. */
     std::vector<ThreadState *> thread;
 
@@ -495,7 +499,13 @@ class Commit
 
         /** Number of cycles where the commit bandwidth limit is reached. */
         statistics::Scalar commitEligibleSamples;
+
+        /** Number of squashes due to value prediction errors. */
+        statistics::Scalar squashDueToValuePrediction;
     } stats;
+
+    // difftest
+    void diffInst(ThreadID tid, const DynInstPtr &inst);
 };
 
 } // namespace o3

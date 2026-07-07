@@ -81,6 +81,8 @@ std::string Rename::RenameStats::statusDefinitions[ThreadStatusMax] = {
 
 Rename::Rename(CPU *_cpu, const BaseO3CPUParams &params)
     : cpu(_cpu),
+      valuePred(params.valuePred),
+      enableSelectiveVPFlush(params.enableSelectiveVPFlush),
       iewToRenameDelay(params.iewToRenameDelay),
       decodeToRenameDelay(params.decodeToRenameDelay),
       commitToRenameDelay(params.commitToRenameDelay),
@@ -759,6 +761,45 @@ Rename::renameInsts(ThreadID tid)
         renameSrcRegs(inst, inst->threadNumber);
 
         renameDestRegs(inst, inst->threadNumber);
+
+        // Value prediction: inject predicted value if available
+        if (valuePred) {
+            if (inst->numDestRegs() != 1 || !inst->canLVP()) {
+                DPRINTF(Rename,
+                        "[ValuePred-Rename] Tid:%i Seq:%lu PC:%#lx | "
+                        "vpSupported=false (num_dest=%d, canLVP=%s)\n",
+                        inst->threadNumber, inst->seqNum,
+                        inst->pcState().instAddr(),
+                        inst->numDestRegs(),
+                        inst->canLVP() ? "true" : "false");
+                inst->vpSupported = false;
+                inst->vpResult.speculative = false;
+                inst->vpResult.value = 0xdeadbeefULL;
+            } else {
+                inst->vpSupported = true;
+                if (inst->vpResult.speculative) {
+                    if (!enableSelectiveVPFlush) {
+                        scoreboard->setReg(
+                            inst->renamedDestIdx(0));
+                    }
+                    inst->setRegOperand(inst->staticInst.get(), 0,
+                                        inst->vpResult.value);
+                    inst->popResult();
+                    DPRINTF(Rename,
+                            "[ValuePred-Rename] Tid:%i Seq:%lu PC:%#lx | "
+                            "VP injected! value=%#lx, scoreboard set\n",
+                            inst->threadNumber, inst->seqNum,
+                            inst->pcState().instAddr(), inst->vpResult.value);
+                } else {
+                    DPRINTF(Rename,
+                            "[ValuePred-Rename] Tid:%i Seq:%lu PC:%#lx | "
+                            "vpSupported=true but speculative=false, "
+                            "no value injected\n",
+                            inst->threadNumber, inst->seqNum,
+                            inst->pcState().instAddr());
+                }
+            }
+        }
 
         if (inst->isAtomic() || inst->isStore()) {
             storesInProgress[tid]++;

@@ -43,6 +43,7 @@ from m5.objects.BaseCPU import BaseCPU
 
 # from m5.objects.O3Checker import O3Checker
 from m5.objects.BranchPredictor import *
+from m5.objects.ValuePredictor import *
 from m5.objects.FUPool import *
 from m5.objects.IndexingPolicies import *
 from m5.objects.IQUnit import *
@@ -206,6 +207,10 @@ class BaseO3CPU(BaseCPU):
         "Branch Predictor",
     )
     needsTSO = Param.Bool(False, "Enable TSO Memory model")
+
+    valuePred = Param.ValuePredictor(NULL, "valuepred unit")
+    enableSelectiveVPFlush = Param.Bool(False,
+        "Enable selective rollback for value prediction misprediction")
 
     recvRespThrottling = Param.Bool(
         False, "Enable load receive response throttling in the LSQ"

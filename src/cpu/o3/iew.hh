@@ -51,6 +51,7 @@
 #include "cpu/o3/limits.hh"
 #include "cpu/o3/lsq.hh"
 #include "cpu/o3/scoreboard.hh"
+#include "cpu/valuepred/valuepred_unit.hh"
 #include "cpu/timebuf.hh"
 #include "debug/IEW.hh"
 #include "sim/probe/probe.hh"
@@ -171,6 +172,9 @@ class IEW
 
     /** Wakes all dependents of a completed instruction. */
     void wakeDependents(const DynInstPtr &inst);
+
+    /** Wake dependents of a value-predicted instruction at dispatch. */
+    void lvpWakeDependents(const DynInstPtr &inst);
 
     /** Tells memory dependence unit that a memory instruction needs to be
      * rescheduled. It will re-execute once replayMemInst() is called.
@@ -345,6 +349,10 @@ class IEW
   private:
     /** CPU pointer. */
     CPU *cpu;
+
+    /** Value prediction unit. */
+    valuepred::VPUnit *valuePred;
+    bool enableSelectiveVPFlush;
 
     /** Records if IEW has written to the time buffer this cycle, so that the
      * CPU can deschedule itself if there is no activity.

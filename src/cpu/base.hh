@@ -43,6 +43,8 @@
 #define __CPU_BASE_HH__
 
 #include <memory>
+#include <queue>
+#include <sstream>
 #include <vector>
 
 #include "arch/generic/interrupts.hh"
@@ -59,6 +61,11 @@
 #include "sim/probe/pmu.hh"
 #include "sim/probe/probe.hh"
 #include "sim/signal.hh"
+
+#include "cpu/difftest.hh"
+#include "cpu/golden_global_mem.hh"
+#include "cpu/inst_seq.hh"
+#include "cpu/o3/dyn_inst_ptr.hh"
 
 namespace gem5
 {
@@ -80,6 +87,23 @@ struct AddressMonitor
     uint64_t val;
     bool waiting;   // 0=normal, 1=mwaiting
     bool gotWakeup;
+};
+
+struct DiffAllStates
+{
+    riscv64_CPU_regfile gem5RegFile;
+    riscv64_CPU_regfile referenceRegFile;
+    DiffState diff;
+    RefProxy *proxy;
+    bool hasCommit{false};
+};
+
+enum CsrRegIndex
+{
+    mode = 0, mstatus = 1, sstatus = 2, mepc = 3, sepc = 4,
+    mtval = 5, stval = 6, mtvec = 7, stvec = 8, mcause = 9, scause = 10,
+    satp = 11, mip = 12, mie = 13, mscratch = 14, sscratch = 15,
+    mideleg = 16, medeleg = 17, pc = 18
 };
 
 class CPUProgressEvent : public Event
@@ -145,9 +169,9 @@ class BaseCPU : public ClockedObject
     bool _switchedOut;
 
     /** Cache the cache line size that we get from the system */
-    const Addr _cacheLineSize;
+     const Addr _cacheLineSize;
 
-    /** Global CPU statistics that are merged into the Root object. */
+     /** Global CPU statistics that are merged into the Root object. */
     struct GlobalStats : public statistics::Group
     {
         GlobalStats(statistics::Group *parent);
@@ -899,6 +923,82 @@ class BaseCPU : public ClockedObject
     std::vector<std::unique_ptr<FetchCPUStats>> fetchStats;
     std::vector<std::unique_ptr<ExecuteCPUStats>> executeStats;
     std::vector<std::unique_ptr<CommitCPUStats>> commitStats;
+
+    // difftest public interface
+    virtual void readGem5Regs(ThreadID tid)
+    {
+        panic("difftest:readGem5Regs() is not implemented\n");
+    }
+    void csrDiffMessage(uint64_t gem5_val, uint64_t ref_val, int error_num,
+                        uint64_t &error_reg, InstSeqNum seq,
+                        std::string error_csr_name, int &diff_at);
+    std::pair<int, bool> diffWithNEMU(ThreadID tid, InstSeqNum seq);
+    int difftestHartId(ThreadID tid) const;
+    std::stringstream diffMsg;
+    void reportDiffMismatch(ThreadID tid, InstSeqNum seq);
+    void clearDiffMismatch(ThreadID tid, InstSeqNum seq);
+
+    const unsigned IntRegIndexBase = 0;
+    const unsigned FPRegIndexBase = 32;
+    const unsigned MaxDestRegisters = 2;
+
+    struct
+    {
+        gem5::StaticInstPtr inst;
+        Fault instFault;
+        std::vector<gem5::RegVal> scalarResults;
+        uint64_t vecResult[32];
+        const gem5::PCStateBase *pc;
+        bool curInstStrictOrdered{false};
+        gem5::Addr physEffAddr;
+        gem5::Addr effSize;
+        uint8_t *goldenValue{nullptr};
+        uint64_t amoOldGoldenValue{0};
+        bool errorRegsValue[96];
+        bool errorCsrsValue[36];
+        bool errorPcValue;
+        std::queue<o3::DynInstPtr> lastCommittedMsg;
+    } diffInfo;
+
+    virtual RegVal diffReadMiscRegNoEffect(int misc_reg, ThreadID tid) const
+    {
+        return 0;
+    }
+    virtual RegVal diffReadMiscReg(int misc_reg, ThreadID tid)
+    {
+        return 0;
+    }
+    virtual void diffSetMiscRegNoEffect(int misc_reg, RegVal val, ThreadID tid)
+    {
+    }
+
+    void difftestStep(ThreadID tid) { difftestStep(tid, 0); }
+    void difftestStep(ThreadID tid, InstSeqNum seq);
+    inline bool difftestEnabled() const { return enableDifftest; }
+    void displayGem5Regs(ThreadID tid);
+    void difftestRaiseIntr(uint64_t no, ThreadID tid = 0);
+    void setExceptionGuideExecInfo(uint64_t exception_num, uint64_t mtval,
+                                    uint64_t stval, bool force_set_jump_target,
+                                    uint64_t jump_target, ThreadID tid);
+    void clearGuideExecInfo();
+
+    // difftest member variables (declared last to avoid init order issues)
+    bool enableDifftest;
+    bool dumpCommitFlag;
+    int dumpStartNum;
+    bool enableRVV{false};
+    bool enableRVHDIFF{false};
+    bool enableSkipCSR{false};
+    std::vector<std::shared_ptr<DiffAllStates>> diffAllStates{};
+
+    enum diffRegConfig
+    {
+        diffAllNum = 96,
+        diffCsrNum = 36,
+    };
+
+    int committedInstNum = 0;
+    std::vector<std::pair<Addr, std::string>> committedInsts;
 };
 
 } // namespace gem5

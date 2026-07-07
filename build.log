@@ -1,0 +1,453 @@
+scons: Reading SConscript files ...
+
+You're missing the pre-commit/commit-msg hooks. These hook help to ensure your
+code follows gem5's style rules on git commit and your commit messages follow
+our commit message requirements. This script will now install these hooks in
+your .git/hooks/ directory.
+Press enter to continue, or ctrl-c to abort:
+ Cannot find 'pre-commit'. Please ensure all Python requirements are 
+installed. This can be done via 'pip install -r requirements.txt'.
+It is strongly recommended you install the pre-commit hooks before working with gem5. Do you want to continue compilation (y/n)?
+Mkdir("/home/cosin/xs-gem5/gem5/build/RISCV/gem5.build")
+Checking for compiler -Wno-volatile support... (cached) yes
+Checking for linker -Wl,--as-needed support... (cached) yes
+Checking for linker -fuse-ld=gold support... (cached) yes
+Checking for linker -Wl,--threads support... (cached) yes
+Checking for linker -Wl,--thread-count=12 support... (cached) yes
+Checking for compiler -gz support... (cached) yes
+Checking for linker -gz support... (cached) yes
+Info: Using Python config: python3-config
+Checking for C header file Python.h... (cached) yes
+Checking Python version... (cached) 3.14.4
+Checking for accept(0,0,0) in C++ library None... (cached) yes
+Checking for zlibVersion() in C++ library z... (cached) yes
+Checking for ZSTD_isError(0) in C++ library zstd... (cached) yes
+Checking for C library tcmalloc_minimal... (cached) yes
+Building in /home/cosin/xs-gem5/gem5/build/RISCV
+"build_tools/kconfig_base.py" "/home/cosin/xs-gem5/gem5/build/RISCV/gem5.build/Kconfig" "/home/cosin/xs-gem5/gem5/src/Kconfig"
+Checking for C header file capstone/capstone.h... (cached) no
+Warning: Header file <capstone/capstone.h> not found.
+         This host has no capstone library installed.
+Checking for C header file linux/kvm.h... (cached) yes
+Checking for timer_create(CLOCK_MONOTONIC, NULL, NULL) in C library None... (cached) yes
+Checking for member exclude_host in struct perf_event_attr...(cached) yes
+Checking for C header file fenv.h... (cached) yes
+Checking for C header file png.h... (cached) no
+Warning: Header file <png.h> not found.
+         This host has no libpng library.
+         Disabling support for PNG framebuffers.
+Checking for clock_nanosleep(0,0,NULL,NULL) in C library None... (cached) yes
+Checking for C header file valgrind/valgrind.h... (cached) no
+Checking for pkg-config package hdf5-serial... (cached) no
+Checking for pkg-config package hdf5... (cached) no
+Checking for H5Fcreate("", 0, 0, 0) in C library hdf5... (cached) no
+Warning: Couldn't find HDF5 C++ libraries. Disabling HDF5 support.
+Checking for pkg-config package protobuf... (cached) yes
+Checking for shm_open("/test", 0, 0) in C library None... (cached) yes
+Checking for backtrace_symbols_fd((void *)1, 0, 0) in C library None... (cached) yes
+Checking size of struct kvm_xsave ... (cached) yes
+Checking for C header file linux/if_tun.h... (cached) yes
+Checking whether __i386__ is declared... (cached) no
+Checking whether __x86_64__ is declared... (cached) yes
+Checking for compiler -Wno-self-assign-overloaded support... (cached) yes
+Checking for linker -Wno-free-nonheap-object support... (cached) yes
+BUILD_TLM not set, not building CHI-TLM integration
+
+scons: done reading SConscript files.
+scons: Building targets ...
+ [     CXX] RISCV/python/_m5/param_BaseO3CPU.cc -> .o
+ [     CXX] src/cpu/o3/bac.cc -> RISCV/cpu/o3/bac.o
+ [     CXX] src/cpu/o3/commit.cc -> RISCV/cpu/o3/commit.o
+ [     CXX] src/cpu/o3/cpu.cc -> RISCV/cpu/o3/cpu.o
+ [     CXX] src/cpu/o3/decode.cc -> RISCV/cpu/o3/decode.o
+ [     CXX] src/cpu/o3/dyn_inst.cc -> RISCV/cpu/o3/dyn_inst.o
+ [     CXX] src/cpu/o3/fetch.cc -> RISCV/cpu/o3/fetch.o
+ [     CXX] src/cpu/o3/ftq.cc -> RISCV/cpu/o3/ftq.o
+ [     CXX] src/cpu/o3/iew.cc -> RISCV/cpu/o3/iew.o
+ [     CXX] src/cpu/o3/inst_queue.cc -> RISCV/cpu/o3/inst_queue.o
+ [     CXX] src/cpu/o3/lsq.cc -> RISCV/cpu/o3/lsq.o
+ [     CXX] src/cpu/o3/lsq_unit.cc -> RISCV/cpu/o3/lsq_unit.o
+ [     CXX] src/cpu/o3/mem_dep_unit.cc -> RISCV/cpu/o3/mem_dep_unit.o
+ [     CXX] src/cpu/o3/regfile.cc -> RISCV/cpu/o3/regfile.o
+ [     CXX] src/cpu/o3/rename.cc -> RISCV/cpu/o3/rename.o
+ [     CXX] src/cpu/o3/rob.cc -> RISCV/cpu/o3/rob.o
+ [     CXX] src/cpu/o3/thread_context.cc -> RISCV/cpu/o3/thread_context.o
+ [     CXX] src/cpu/o3/thread_state.cc -> RISCV/cpu/o3/thread_state.o
+ [     CXX] RISCV/python/_m5/param_BaseO3Checker.cc -> .o
+ [     CXX] src/cpu/o3/probe/elastic_trace.cc -> RISCV/cpu/o3/probe/elastic_trace.o
+ [     CXX] RISCV/python/_m5/param_DirectedGenerator.cc -> .o
+ [SO Param] m5.objects.RubyDirectedTester, SeriesRequestGenerator -> RISCV/params/SeriesRequestGenerator.hh
+ [SO Param] m5.objects.RubyDirectedTester, InvalidateGenerator -> RISCV/python/_m5/param_InvalidateGenerator.cc
+ [     CXX] RISCV/python/_m5/param_RubyDirectedTester.cc -> .o
+ [     CXX] RISCV/python/_m5/param_SeriesRequestGenerator.cc -> .o
+ [     CXX] RISCV/python/_m5/param_InvalidateGenerator.cc -> .o
+ [     CXX] src/cpu/testers/directedtest/RubyDirectedTester.cc -> RISCV/cpu/testers/directedtest/RubyDirectedTester.o
+ [     CXX] src/cpu/testers/directedtest/DirectedGenerator.cc -> RISCV/cpu/testers/directedtest/DirectedGenerator.o
+ [     CXX] src/cpu/testers/directedtest/SeriesRequestGenerator.cc -> RISCV/cpu/testers/directedtest/SeriesRequestGenerator.o
+ [     CXX] src/cpu/testers/directedtest/InvalidateGenerator.cc -> RISCV/cpu/testers/directedtest/InvalidateGenerator.o
+ [     CXX] RISCV/python/_m5/param_RubyTester.cc -> .o
+ [     CXX] src/cpu/testers/rubytest/RubyTester.cc -> RISCV/cpu/testers/rubytest/RubyTester.o
+ [     CXX] src/cpu/testers/rubytest/Check.cc -> RISCV/cpu/testers/rubytest/Check.o
+ [     CXX] src/cpu/testers/rubytest/CheckTable.cc -> RISCV/cpu/testers/rubytest/CheckTable.o
+ [     CXX] src/cpu/testers/traffic_gen/base.cc -> RISCV/cpu/testers/traffic_gen/base.o
+ [     CXX] src/cpu/testers/traffic_gen/gups_gen.cc -> RISCV/cpu/testers/traffic_gen/gups_gen.o
+ [     CXX] src/cpu/testers/traffic_gen/stream_gen.cc -> RISCV/cpu/testers/traffic_gen/stream_gen.o
+ [     CXX] RISCV/python/_m5/param_BaseTrafficGen.cc -> .o
+ [     CXX] RISCV/python/_m5/param_GUPSGen.cc -> .o
+ [     CXX] src/cpu/testers/traffic_gen/pygen.cc -> RISCV/cpu/testers/traffic_gen/pygen.o
+ [     CXX] RISCV/python/_m5/param_PyTrafficGen.cc -> .o
+ [     CXX] RISCV/python/_m5/param_TrafficGen.cc -> .o
+ [     CXX] src/cpu/testers/traffic_gen/traffic_gen.cc -> RISCV/cpu/testers/traffic_gen/traffic_gen.o
+ [     CXX] RISCV/python/_m5/param_SpatterGen.cc -> .o
+ [     CXX] src/cpu/testers/spatter_gen/spatter_gen.cc -> RISCV/cpu/testers/spatter_gen/spatter_gen.o
+ [     CXX] RISCV/python/_m5/param_GarnetSyntheticTraffic.cc -> .o
+ [     CXX] src/cpu/testers/garnet_synthetic_traffic/GarnetSyntheticTraffic.cc -> RISCV/cpu/testers/garnet_synthetic_traffic/GarnetSyntheticTraffic.o
+ [     CXX] RISCV/python/_m5/param_MemTest.cc -> .o
+ [SO Param] m5.objects.InstTracker, GlobalInstTracker -> RISCV/python/_m5/param_GlobalInstTracker.cc
+ [     CXX] RISCV/python/_m5/param_Gem5ToTlmBridgeBase.cc -> .o
+ [     CXX] RISCV/python/_m5/param_TlmToGem5BridgeBase.cc -> .o
+ [     CXX] RISCV/python/_m5/param_Gem5ToTlmBridge32.cc -> .o
+ [     CXX] RISCV/python/_m5/param_Gem5ToTlmBridge64.cc -> .o
+ [     CXX] RISCV/python/_m5/param_Gem5ToTlmBridge128.cc -> .o
+ [     CXX] RISCV/python/_m5/param_Gem5ToTlmBridge256.cc -> .o
+ [     CXX] RISCV/python/_m5/param_Gem5ToTlmBridge512.cc -> .o
+ [     CXX] RISCV/python/_m5/param_TlmToGem5Bridge32.cc -> .o
+ [     CXX] RISCV/python/_m5/param_TlmToGem5Bridge64.cc -> .o
+ [     CXX] RISCV/python/_m5/param_TlmToGem5Bridge128.cc -> .o
+ [     CXX] RISCV/python/_m5/param_TlmToGem5Bridge256.cc -> .o
+ [     CXX] RISCV/python/_m5/param_TlmToGem5Bridge512.cc -> .o
+ [     CXX] src/systemc/tlm_bridge/gem5_to_tlm.cc -> RISCV/systemc/tlm_bridge/gem5_to_tlm.o
+ [     CXX] src/systemc/tlm_bridge/sc_ext.cc -> RISCV/systemc/tlm_bridge/sc_ext.o
+ [     CXX] src/systemc/tlm_bridge/tlm_to_gem5.cc -> RISCV/systemc/tlm_bridge/tlm_to_gem5.o
+ [     CXX] src/kern/linux/helpers.cc -> RISCV/kern/linux/helpers.o
+ [     CXX] src/kern/freebsd/events.cc -> RISCV/kern/freebsd/events.o
+ [SO Param] m5.objects.BloomFilters, BloomFilterPerfect -> RISCV/python/_m5/param_BloomFilterPerfect.cc
+ [     CXX] RISCV/python/_m5/param_CommMonitor.cc -> .o
+ [     CXX] src/mem/comm_monitor.cc -> RISCV/mem/comm_monitor.o
+ [     CXX] RISCV/python/_m5/param_SysBridge.cc -> .o
+ [     CXX] RISCV/python/_m5/param_MemCtrl.cc -> .o
+ [     CXX] RISCV/python/_m5/param_HeteroMemCtrl.cc -> .o
+ [     CXX] RISCV/python/_m5/param_MemInterface.cc -> .o
+ [     CXX] RISCV/python/_m5/param_DRAMInterface.cc -> .o
+ [     CXX] RISCV/python/_m5/param_NVMInterface.cc -> .o
+ [     CXX] RISCV/python/_m5/param_ExternalMaster.cc -> .o
+ [     CXX] RISCV/python/_m5/param_SharedMemoryServer.cc -> .o
+ [     CXX] RISCV/python/_m5/param_CoherentXBar.cc -> .o
+ [     CXX] RISCV/python/_m5/param_SnoopFilter.cc -> .o
+ [     CXX] src/mem/abstract_mem.cc -> RISCV/mem/abstract_mem.o
+ [     CXX] src/mem/coherent_xbar.cc -> RISCV/mem/coherent_xbar.o
+ [     CXX] src/mem/external_master.cc -> RISCV/mem/external_master.o
+ [     CXX] src/mem/mem_ctrl.cc -> RISCV/mem/mem_ctrl.o
+ [     CXX] src/mem/hetero_mem_ctrl.cc -> RISCV/mem/hetero_mem_ctrl.o
+ [     CXX] src/mem/hbm_ctrl.cc -> RISCV/mem/hbm_ctrl.o
+ [     CXX] src/mem/mem_interface.cc -> RISCV/mem/mem_interface.o
+ [     CXX] src/mem/dram_interface.cc -> RISCV/mem/dram_interface.o
+ [     CXX] src/mem/nvm_interface.cc -> RISCV/mem/nvm_interface.o
+ [     CXX] src/mem/shared_memory_server.cc -> RISCV/mem/shared_memory_server.o
+ [     CXX] src/mem/snoop_filter.cc -> RISCV/mem/snoop_filter.o
+ [     CXX] src/mem/sys_bridge.cc -> RISCV/mem/sys_bridge.o
+ [     CXX] src/mem/se_translating_port_proxy.cc -> RISCV/mem/se_translating_port_proxy.o
+ [     CXX] RISCV/python/_m5/param_MemCheckerMonitor.cc -> .o
+ [     CXX] src/mem/mem_checker_monitor.cc -> RISCV/mem/mem_checker_monitor.o
+ [     CXX] src/mem/ruby/profiler/AddressProfiler.cc -> RISCV/mem/ruby/profiler/AddressProfiler.o
+ [     CXX] src/mem/ruby/profiler/Profiler.cc -> RISCV/mem/ruby/profiler/Profiler.o
+ [     CXX] RISCV/python/_m5/param_RubySystem.cc -> .o
+ [     CXX] RISCV/python/_m5/param_RubyPort.cc -> .o
+ [     CXX] RISCV/python/_m5/param_RubyPortProxy.cc -> .o
+ [     CXX] RISCV/python/_m5/param_RubySequencer.cc -> .o
+ [     CXX] RISCV/python/_m5/param_RubyHTMSequencer.cc -> .o
+ [     CXX] RISCV/python/_m5/param_DMASequencer.cc -> .o
+ [     CXX] src/mem/ruby/system/CacheRecorder.cc -> RISCV/mem/ruby/system/CacheRecorder.o
+ [     CXX] src/mem/ruby/system/DMASequencer.cc -> RISCV/mem/ruby/system/DMASequencer.o
+ [     CXX] src/mem/ruby/system/RubyPort.cc -> RISCV/mem/ruby/system/RubyPort.o
+ [     CXX] src/mem/ruby/system/RubyPortProxy.cc -> RISCV/mem/ruby/system/RubyPortProxy.o
+ [     CXX] src/mem/ruby/system/RubySystem.cc -> RISCV/mem/ruby/system/RubySystem.o
+ [     CXX] src/mem/ruby/system/Sequencer.cc -> RISCV/mem/ruby/system/Sequencer.o
+ [     CXX] RISCV/mem/ruby/protocol/MI_example/Directory_TBE.cc -> .o
+ [     CXX] RISCV/mem/ruby/protocol/SequencerMsg.cc -> .o
+ [     CXX] RISCV/mem/ruby/protocol/MachineType.cc -> .o
+ [     CXX] RISCV/mem/ruby/protocol/MI_example/DMARequestMsg.cc -> .o
+ [     CXX] RISCV/mem/ruby/protocol/MI_example/L1Cache_TBE.cc -> .o
+ [     CXX] RISCV/mem/ruby/protocol/MI_example/DMA_TBE.cc -> .o
+ [MAKE INC] src/mem/ruby/structures/TBETable.hh -> RISCV/mem/ruby/protocol/TBETable.hh
+ [MAKE INC] src/mem/ruby/structures/CacheMemory.hh -> RISCV/mem/ruby/protocol/CacheMemory.hh
+ [MAKE INC] src/mem/ruby/system/DMASequencer.hh -> RISCV/mem/ruby/protocol/DMASequencer.hh
+ [MAKE INC] src/mem/ruby/structures/DirectoryMemory.hh -> RISCV/mem/ruby/protocol/DirectoryMemory.hh
+ [MAKE INC] src/mem/ruby/structures/RubyPrefetcher.hh -> RISCV/mem/ruby/protocol/RubyPrefetcher.hh
+ [MAKE INC] src/mem/ruby/system/Sequencer.hh -> RISCV/mem/ruby/protocol/Sequencer.hh
+ [     CXX] RISCV/mem/ruby/protocol/MI_example/Directory_Transitions.cc -> .o
+ [     CXX] RISCV/mem/ruby/protocol/MI_example/Directory_Wakeup.cc -> .o
+ [     CXX] RISCV/mem/ruby/protocol/MI_example/DMA_Transitions.cc -> .o
+ [     CXX] RISCV/mem/ruby/protocol/MI_example/L1Cache_Controller.cc -> .o
+ [     CXX] RISCV/mem/ruby/protocol/MI_example/L1Cache_Transitions.cc -> .o
+ [     CXX] RISCV/mem/ruby/protocol/MI_example/DMA_Wakeup.cc -> .o
+ [     CXX] RISCV/mem/ruby/protocol/MI_example/DMAResponseMsg.cc -> .o
+ [     CXX] RISCV/mem/ruby/protocol/MI_example/L1Cache_Wakeup.cc -> .o
+ [     CXX] RISCV/mem/ruby/protocol/MI_example/Directory_Controller.cc -> .o
+ [     CXX] RISCV/mem/ruby/protocol/MI_example/L1Cache_Entry.cc -> .o
+ [     CXX] RISCV/python/_m5/param_MI_example_DMA_Controller.cc -> .o
+ [     CXX] RISCV/python/_m5/param_MI_example_Directory_Controller.cc -> .o
+ [     CXX] RISCV/mem/ruby/protocol/MI_example/Directory_Entry.cc -> .o
+ [     CXX] RISCV/python/_m5/param_MI_example_L1Cache_Controller.cc -> .o
+ [     CXX] RISCV/mem/ruby/protocol/MI_example/DMA_Controller.cc -> .o
+ [     CXX] RISCV/mem/ruby/protocol/MI_example/RequestMsg.cc -> .o
+ [     CXX] RISCV/mem/ruby/protocol/MI_example/ResponseMsg.cc -> .o
+ [     CXX] RISCV/mem/ruby/protocol/MemoryMsg.cc -> .o
+ [     CXX] RISCV/python/_m5/param_RubyCache.cc -> .o
+ [     CXX] RISCV/python/_m5/param_RubyDirectoryMemory.cc -> .o
+ [     CXX] RISCV/python/_m5/param_RubyPrefetcher.cc -> .o
+ [     CXX] src/mem/ruby/structures/DirectoryMemory.cc -> RISCV/mem/ruby/structures/DirectoryMemory.o
+ [     CXX] src/mem/ruby/structures/CacheMemory.cc -> RISCV/mem/ruby/structures/CacheMemory.o
+ [     CXX] src/mem/ruby/structures/RubyPrefetcher.cc -> RISCV/mem/ruby/structures/RubyPrefetcher.o
+ [     CXX] src/mem/ruby/structures/RubyPrefetcherProxy.cc -> RISCV/mem/ruby/structures/RubyPrefetcherProxy.o
+ [     CXX] src/mem/ruby/structures/TimerTable.cc -> RISCV/mem/ruby/structures/TimerTable.o
+ [     CXX] src/mem/ruby/structures/BankedArray.cc -> RISCV/mem/ruby/structures/BankedArray.o
+ [     CXX] src/mem/ruby/structures/ALUFreeListArray.cc -> RISCV/mem/ruby/structures/ALUFreeListArray.o
+ [     CXX] RISCV/python/_m5/param_BasicLink.cc -> .o
+ [     CXX] RISCV/python/_m5/param_BasicExtLink.cc -> .o
+ [     CXX] RISCV/python/_m5/param_BasicIntLink.cc -> .o
+ [     CXX] RISCV/python/_m5/param_RubyNetwork.cc -> .o
+ [     CXX] src/mem/ruby/network/BasicLink.cc -> RISCV/mem/ruby/network/BasicLink.o
+ [     CXX] src/mem/ruby/network/Network.cc -> RISCV/mem/ruby/network/Network.o
+ [     CXX] src/mem/ruby/network/RouteProfiler.cc -> RISCV/mem/ruby/network/RouteProfiler.o
+ [     CXX] src/mem/ruby/network/Topology.cc -> RISCV/mem/ruby/network/Topology.o
+ [     CXX] RISCV/python/_m5/param_SimpleExtLink.cc -> .o
+ [     CXX] RISCV/python/_m5/param_SimpleIntLink.cc -> .o
+ [     CXX] RISCV/python/_m5/param_SimpleNetwork.cc -> .o
+ [     CXX] RISCV/python/_m5/param_BaseRoutingUnit.cc -> .o
+ [     CXX] RISCV/python/_m5/param_WeightBased.cc -> .o
+ [     CXX] RISCV/python/_m5/param_Switch.cc -> .o
+ [     CXX] src/mem/ruby/network/simple/PerfectSwitch.cc -> RISCV/mem/ruby/network/simple/PerfectSwitch.o
+ [     CXX] src/mem/ruby/network/simple/SimpleLink.cc -> RISCV/mem/ruby/network/simple/SimpleLink.o
+ [     CXX] src/mem/ruby/network/simple/SimpleNetwork.cc -> RISCV/mem/ruby/network/simple/SimpleNetwork.o
+ [     CXX] src/mem/ruby/network/simple/Switch.cc -> RISCV/mem/ruby/network/simple/Switch.o
+ [     CXX] src/mem/ruby/network/simple/Throttle.cc -> RISCV/mem/ruby/network/simple/Throttle.o
+ [     CXX] src/mem/ruby/network/simple/routing/WeightBased.cc -> RISCV/mem/ruby/network/simple/routing/WeightBased.o
+ [     CXX] RISCV/python/_m5/param_NetworkBridge.cc -> .o
+ [     CXX] RISCV/python/_m5/param_GarnetIntLink.cc -> .o
+ [     CXX] RISCV/python/_m5/param_GarnetExtLink.cc -> .o
+ [     CXX] RISCV/python/_m5/param_GarnetNetwork.cc -> .o
+ [     CXX] RISCV/python/_m5/param_GarnetNetworkInterface.cc -> .o
+ [     CXX] RISCV/python/_m5/param_GarnetRouter.cc -> .o
+ [     CXX] src/mem/ruby/network/garnet/GarnetLink.cc -> RISCV/mem/ruby/network/garnet/GarnetLink.o
+ [     CXX] src/mem/ruby/network/garnet/GarnetNetwork.cc -> RISCV/mem/ruby/network/garnet/GarnetNetwork.o
+ [     CXX] src/mem/ruby/network/garnet/InputUnit.cc -> RISCV/mem/ruby/network/garnet/InputUnit.o
+ [     CXX] src/mem/ruby/network/garnet/NetworkInterface.cc -> RISCV/mem/ruby/network/garnet/NetworkInterface.o
+ [     CXX] src/mem/ruby/network/garnet/OutVcState.cc -> RISCV/mem/ruby/network/garnet/OutVcState.o
+ [     CXX] src/mem/ruby/network/garnet/OutputUnit.cc -> RISCV/mem/ruby/network/garnet/OutputUnit.o
+ [     CXX] src/mem/ruby/network/garnet/Router.cc -> RISCV/mem/ruby/network/garnet/Router.o
+ [     CXX] src/mem/ruby/network/garnet/RoutingUnit.cc -> RISCV/mem/ruby/network/garnet/RoutingUnit.o
+ [     CXX] src/mem/ruby/network/garnet/SwitchAllocator.cc -> RISCV/mem/ruby/network/garnet/SwitchAllocator.o
+ [     CXX] src/mem/ruby/network/garnet/CrossbarSwitch.cc -> RISCV/mem/ruby/network/garnet/CrossbarSwitch.o
+ [     CXX] src/mem/ruby/network/garnet/NetworkBridge.cc -> RISCV/mem/ruby/network/garnet/NetworkBridge.o
+ [     CXX] RISCV/python/_m5/param_RubyController.cc -> .o
+ [     CXX] src/mem/ruby/slicc_interface/AbstractController.cc -> RISCV/mem/ruby/slicc_interface/AbstractController.o
+ [     CXX] src/mem/ruby/common/Address.cc -> RISCV/mem/ruby/common/Address.o
+ [     CXX] src/mem/ruby/common/NetDest.cc -> RISCV/mem/ruby/common/NetDest.o
+ [     CXX] src/mem/ruby/common/WriteMask.cc -> RISCV/mem/ruby/common/WriteMask.o
+ [     CXX] RISCV/python/_m5/param_QoSMemCtrl.cc -> .o
+ [     CXX] RISCV/python/_m5/param_QoSMemSinkCtrl.cc -> .o
+ [     CXX] RISCV/python/_m5/param_QoSMemSinkInterface.cc -> .o
+ [     CXX] RISCV/python/_m5/param_QoSPolicy.cc -> .o
+ [     CXX] RISCV/python/_m5/param_QoSFixedPriorityPolicy.cc -> .o
+ [SO Param] m5.objects.QoSPolicy, QoSPropFairPolicy -> RISCV/python/_m5/param_QoSPropFairPolicy.cc
+ [     CXX] RISCV/python/_m5/param_QoSPropFairPolicy.cc -> .o
+ [     CXX] RISCV/python/_m5/param_QoSTurnaroundPolicy.cc -> .o
+ [     CXX] RISCV/python/_m5/param_QoSTurnaroundPolicyIdeal.cc -> .o
+ [     CXX] src/mem/qos/policy.cc -> RISCV/mem/qos/policy.o
+ [     CXX] src/mem/qos/policy_fixed_prio.cc -> RISCV/mem/qos/policy_fixed_prio.o
+ [     CXX] src/mem/qos/policy_pf.cc -> RISCV/mem/qos/policy_pf.o
+ [     CXX] src/mem/qos/turnaround_policy_ideal.cc -> RISCV/mem/qos/turnaround_policy_ideal.o
+ [     CXX] src/mem/qos/q_policy.cc -> RISCV/mem/qos/q_policy.o
+ [     CXX] src/mem/qos/mem_ctrl.cc -> RISCV/mem/qos/mem_ctrl.o
+ [     CXX] src/mem/qos/mem_sink.cc -> RISCV/mem/qos/mem_sink.o
+ [     CXX] RISCV/python/_m5/param_StackDistProbe.cc -> .o
+ [     CXX] src/mem/probes/stack_dist.cc -> RISCV/mem/probes/stack_dist.o
+ [     CXX] RISCV/python/_m5/param_MemFootprintProbe.cc -> .o
+ [     CXX] src/mem/probes/mem_footprint.cc -> RISCV/mem/probes/mem_footprint.o
+ [     CXX] RISCV/python/_m5/param_MemTraceProbe.cc -> .o
+ [     CXX] src/mem/probes/mem_trace.cc -> RISCV/mem/probes/mem_trace.o
+ [     CXX] RISCV/python/_m5/param_WriteAllocator.cc -> .o
+ [     CXX] RISCV/python/_m5/param_BaseCache.cc -> .o
+ [     CXX] RISCV/python/_m5/param_Cache.cc -> .o
+ [     CXX] RISCV/python/_m5/param_NoncoherentCache.cc -> .o
+ [     CXX] src/mem/cache/base.cc -> RISCV/mem/cache/base.o
+ [     CXX] src/mem/cache/cache.cc -> RISCV/mem/cache/cache.o
+ [     CXX] src/mem/cache/mshr.cc -> RISCV/mem/cache/mshr.o
+ [     CXX] src/mem/cache/noncoherent_cache.cc -> RISCV/mem/cache/noncoherent_cache.o
+ [     CXX] src/mem/cache/write_queue_entry.cc -> RISCV/mem/cache/write_queue_entry.o
+ [     CXX] RISCV/python/_m5/param_BasePrefetcher.cc -> .o
+ [     CXX] RISCV/python/_m5/param_MultiPrefetcher.cc -> .o
+ [     CXX] RISCV/python/_m5/param_QueuedPrefetcher.cc -> .o
+ [SO Param] m5.objects.Prefetcher, StridePrefetcherHashedSetAssociative -> RISCV/python/_m5/param_StridePrefetcherHashedSetAssociative.cc
+ [     CXX] RISCV/python/_m5/param_StridePrefetcher.cc -> .o
+ [     CXX] RISCV/python/_m5/param_SmsPrefetcher.cc -> .o
+ [     CXX] RISCV/python/_m5/param_TaggedPrefetcher.cc -> .o
+ [     CXX] RISCV/python/_m5/param_IndirectMemoryPrefetcher.cc -> .o
+ [     CXX] RISCV/python/_m5/param_SignaturePathPrefetcher.cc -> .o
+ [     CXX] RISCV/python/_m5/param_SignaturePathPrefetcherV2.cc -> .o
+ [     CXX] RISCV/python/_m5/param_AMPMPrefetcher.cc -> .o
+ [     CXX] RISCV/python/_m5/param_DCPTPrefetcher.cc -> .o
+ [SO Param] m5.objects.Prefetcher, IrregularStreamBufferPrefetcher -> RISCV/params/IrregularStreamBufferPrefetcher.hh
+ [     CXX] RISCV/python/_m5/param_IrregularStreamBufferPrefetcher.cc -> .o
+ [     CXX] RISCV/python/_m5/param_SlimAMPMPrefetcher.cc -> .o
+ [     CXX] RISCV/python/_m5/param_BOPPrefetcher.cc -> .o
+ [     CXX] RISCV/python/_m5/param_SBOOEPrefetcher.cc -> .o
+ [     CXX] RISCV/python/_m5/param_STeMSPrefetcher.cc -> .o
+ [     CXX] RISCV/python/_m5/param_PIFPrefetcher.cc -> .o
+ [     CXX] src/mem/cache/prefetch/access_map_pattern_matching.cc -> RISCV/mem/cache/prefetch/access_map_pattern_matching.o
+ [     CXX] src/mem/cache/prefetch/base.cc -> RISCV/mem/cache/prefetch/base.o
+ [     CXX] src/mem/cache/prefetch/multi.cc -> RISCV/mem/cache/prefetch/multi.o
+ [     CXX] src/mem/cache/prefetch/bop.cc -> RISCV/mem/cache/prefetch/bop.o
+ [     CXX] src/mem/cache/prefetch/delta_correlating_prediction_tables.cc -> RISCV/mem/cache/prefetch/delta_correlating_prediction_tables.o
+ [     CXX] src/mem/cache/prefetch/irregular_stream_buffer.cc -> RISCV/mem/cache/prefetch/irregular_stream_buffer.o
+ [     CXX] src/mem/cache/prefetch/indirect_memory.cc -> RISCV/mem/cache/prefetch/indirect_memory.o
+ [     CXX] src/mem/cache/prefetch/pif.cc -> RISCV/mem/cache/prefetch/pif.o
+ [     CXX] src/mem/cache/prefetch/queued.cc -> RISCV/mem/cache/prefetch/queued.o
+ [     CXX] src/mem/cache/prefetch/sbooe.cc -> RISCV/mem/cache/prefetch/sbooe.o
+ [     CXX] src/mem/cache/prefetch/sms.cc -> RISCV/mem/cache/prefetch/sms.o
+ [     CXX] src/mem/cache/prefetch/signature_path.cc -> RISCV/mem/cache/prefetch/signature_path.o
+ [     CXX] src/mem/cache/prefetch/signature_path_v2.cc -> RISCV/mem/cache/prefetch/signature_path_v2.o
+ [     CXX] src/mem/cache/prefetch/slim_ampm.cc -> RISCV/mem/cache/prefetch/slim_ampm.o
+ [     CXX] src/mem/cache/prefetch/spatio_temporal_memory_streaming.cc -> RISCV/mem/cache/prefetch/spatio_temporal_memory_streaming.o
+ [     CXX] src/mem/cache/prefetch/stride.cc -> RISCV/mem/cache/prefetch/stride.o
+ [     CXX] src/mem/cache/prefetch/tagged.cc -> RISCV/mem/cache/prefetch/tagged.o
+ [     CXX] src/mem/cache/prefetch/fdp.cc -> RISCV/mem/cache/prefetch/fdp.o
+ [     CXX] RISCV/python/_m5/param_FrequentValuesCompressor.cc -> .o
+ [     CXX] src/mem/cache/compressors/base.cc -> RISCV/mem/cache/compressors/base.o
+ [     CXX] src/mem/cache/compressors/frequent_values.cc -> RISCV/mem/cache/compressors/frequent_values.o
+ [     CXX] RISCV/python/_m5/param_BaseTags.cc -> .o
+ [     CXX] RISCV/python/_m5/param_BaseSetAssoc.cc -> .o
+ [     CXX] RISCV/python/_m5/param_SectorTags.cc -> .o
+ [     CXX] RISCV/python/_m5/param_CompressedTags.cc -> .o
+ [     CXX] src/mem/cache/tags/base.cc -> RISCV/mem/cache/tags/base.o
+ [     CXX] src/mem/cache/tags/base_set_assoc.cc -> RISCV/mem/cache/tags/base_set_assoc.o
+ [     CXX] src/mem/cache/tags/compressed_tags.cc -> RISCV/mem/cache/tags/compressed_tags.o
+ [     CXX] src/mem/cache/tags/sector_tags.cc -> RISCV/mem/cache/tags/sector_tags.o
+ [SO Param] m5.objects.PartitioningPolicies, MaxCapacityPartitioningPolicy -> RISCV/python/_m5/param_MaxCapacityPartitioningPolicy.cc
+ [     CXX] RISCV/python/_m5/param_System.cc -> .o
+ [VER TAGS]  -> RISCV/sim/tags.cc
+ [     CXX] src/sim/kernel_workload.cc -> RISCV/sim/kernel_workload.o
+ [     CXX] src/sim/se_workload.cc -> RISCV/sim/se_workload.o
+ [     CXX] RISCV/python/_m5/param_Process.cc -> .o
+ [     CXX] src/sim/process.cc -> RISCV/sim/process.o
+ [     CXX] src/sim/fd_array.cc -> RISCV/sim/fd_array.o
+ [SO Param] m5.objects.PowerModelState, PowerModelState -> RISCV/python/_m5/param_PowerModelState.cc
+ [SO Param] m5.objects.SimpleObject, SimpleObject -> RISCV/params/SimpleObject.hh
+ [     CXX] RISCV/python/_m5/param_SimpleCache.cc -> .o
+ [     CXX] src/learning_gem5/part2/simple_cache.cc -> RISCV/learning_gem5/part2/simple_cache.o
+ [     CXX] src/arch/riscv/faults.cc -> RISCV/arch/riscv/faults.o
+ [     CXX] src/arch/riscv/isa.cc -> RISCV/arch/riscv/isa.o
+ [     CXX] src/arch/riscv/process.cc -> RISCV/arch/riscv/process.o
+ [     CXX] src/arch/riscv/linux/se_workload.cc -> RISCV/arch/riscv/linux/se_workload.o
+ [     CXX] src/arch/riscv/linux/fs_workload.cc -> RISCV/arch/riscv/linux/fs_workload.o
+ [     CXX] src/arch/riscv/bare_metal/fs_workload.cc -> RISCV/arch/riscv/bare_metal/fs_workload.o
+ [     CXX] RISCV/python/_m5/param_RiscvSystem.cc -> .o
+ [     CXX] src/arch/generic/mmu.cc -> RISCV/arch/generic/mmu.o
+ [     CXX] src/arch/generic/semihosting.cc -> RISCV/arch/generic/semihosting.o
+ [SO Param] m5.objects.BaseMMU, BaseMMU -> RISCV/python/_m5/param_BaseMMU.cc
+ [     CXX] RISCV/python/_m5/param_PioDevice.cc -> .o
+ [     CXX] RISCV/python/_m5/param_BasicPioDevice.cc -> .o
+ [     CXX] RISCV/python/_m5/param_DmaDevice.cc -> .o
+ [     CXX] RISCV/python/_m5/param_DmaVirtDevice.cc -> .o
+ [     CXX] RISCV/python/_m5/param_IsaFake.cc -> .o
+ [     CXX] src/dev/io_device.cc -> RISCV/dev/io_device.o
+ [     CXX] src/dev/isa_fake.cc -> RISCV/dev/isa_fake.o
+ [     CXX] src/dev/dma_device.cc -> RISCV/dev/dma_device.o
+ [     CXX] src/dev/dma_virt_device.cc -> RISCV/dev/dma_virt_device.o
+ [     CXX] RISCV/python/_m5/param_Platform.cc -> .o
+ [     CXX] src/dev/platform.cc -> RISCV/dev/platform.o
+ [     CXX] RISCV/python/_m5/param_BadDevice.cc -> .o
+ [     CXX] src/dev/baddev.cc -> RISCV/dev/baddev.o
+ [     CXX] RISCV/python/_m5/param_GenericRiscvPciHost.cc -> .o
+ [SO Param] m5.objects.PlicDevice, PlicIntDevice -> RISCV/params/PlicIntDevice.hh
+ [     CXX] RISCV/python/_m5/param_PlicIntDevice.cc -> .o
+ [     CXX] RISCV/python/_m5/param_Plic.cc -> .o
+ [     CXX] RISCV/python/_m5/param_RiscvMmioVirtIO.cc -> .o
+ [     CXX] src/dev/riscv/pci_host.cc -> RISCV/dev/riscv/pci_host.o
+ [     CXX] src/dev/riscv/plic_device.cc -> RISCV/dev/riscv/plic_device.o
+ [     CXX] src/dev/riscv/plic.cc -> RISCV/dev/riscv/plic.o
+ [     CXX] src/dev/riscv/vio_mmio.cc -> RISCV/dev/riscv/vio_mmio.o
+ [     CXX] RISCV/python/_m5/param_VirtIODeviceBase.cc -> .o
+ [     CXX] RISCV/python/_m5/param_VirtIODummyDevice.cc -> .o
+ [     CXX] RISCV/python/_m5/param_PciVirtIO.cc -> .o
+ [     CXX] RISCV/python/_m5/param_VirtIOConsole.cc -> .o
+ [     CXX] RISCV/python/_m5/param_VirtIOBlock.cc -> .o
+ [     CXX] RISCV/python/_m5/param_VirtIORng.cc -> .o
+ [     CXX] RISCV/python/_m5/param_VirtIO9PBase.cc -> .o
+ [     CXX] RISCV/python/_m5/param_VirtIO9PProxy.cc -> .o
+ [     CXX] RISCV/python/_m5/param_VirtIO9PDiod.cc -> .o
+ [     CXX] src/dev/virtio/base.cc -> RISCV/dev/virtio/base.o
+ [     CXX] src/dev/virtio/pci.cc -> RISCV/dev/virtio/pci.o
+ [     CXX] src/dev/virtio/console.cc -> RISCV/dev/virtio/console.o
+ [     CXX] src/dev/virtio/block.cc -> RISCV/dev/virtio/block.o
+ [     CXX] src/dev/virtio/rng.cc -> RISCV/dev/virtio/rng.o
+ [     CXX] RISCV/python/_m5/param_IdeDisk.cc -> .o
+ [     CXX] RISCV/python/_m5/param_IdeController.cc -> .o
+ [     CXX] src/dev/storage/ide_ctrl.cc -> RISCV/dev/storage/ide_ctrl.o
+ [     CXX] src/dev/storage/ide_disk.cc -> RISCV/dev/storage/ide_disk.o
+ [     CXX] RISCV/python/_m5/param_SimpleDisk.cc -> .o
+ [     CXX] src/dev/storage/simple_disk.cc -> RISCV/dev/storage/simple_disk.o
+ [     CXX] src/dev/net/etherlink.cc -> RISCV/dev/net/etherlink.o
+ [     CXX] src/dev/net/dist_iface.cc -> RISCV/dev/net/dist_iface.o
+ [     CXX] src/dev/net/dist_etherlink.cc -> RISCV/dev/net/dist_etherlink.o
+ [     CXX] RISCV/python/_m5/param_LupioPIC.cc -> .o
+ [     CXX] RISCV/python/_m5/param_LupioRNG.cc -> .o
+ [     CXX] RISCV/python/_m5/param_LupioRTC.cc -> .o
+ [     CXX] RISCV/python/_m5/param_LupioSYS.cc -> .o
+ [     CXX] src/dev/lupio/lupio_rng.cc -> RISCV/dev/lupio/lupio_rng.o
+ [     CXX] src/dev/lupio/lupio_rtc.cc -> RISCV/dev/lupio/lupio_rtc.o
+ [     CXX] src/dev/lupio/lupio_sys.cc -> RISCV/dev/lupio/lupio_sys.o
+ [     CXX] RISCV/python/_m5/param_I2CBus.cc -> .o
+ [     CXX] src/dev/i2c/bus.cc -> RISCV/dev/i2c/bus.o
+ [     CXX] RISCV/python/_m5/param_PciBar.cc -> .o
+ [     CXX] RISCV/python/_m5/param_PciBarNone.cc -> .o
+ [     CXX] RISCV/python/_m5/param_PciIoBar.cc -> .o
+ [     CXX] RISCV/python/_m5/param_PciLegacyIoBar.cc -> .o
+ [     CXX] RISCV/python/_m5/param_PciMemBar.cc -> .o
+ [     CXX] RISCV/python/_m5/param_PciMemUpperBar.cc -> .o
+ [     CXX] RISCV/python/_m5/param_PciDevice.cc -> .o
+ [     CXX] RISCV/python/_m5/param_PciEndpoint.cc -> .o
+ [     CXX] RISCV/python/_m5/param_PciType1Device.cc -> .o
+ [     CXX] src/dev/pci/device.cc -> RISCV/dev/pci/device.o
+ [     CXX] RISCV/python/_m5/param_PciConfigError.cc -> .o
+ [     CXX] src/dev/pci/upstream.cc -> RISCV/dev/pci/upstream.o
+ [     CXX] RISCV/python/_m5/param_PciHost.cc -> .o
+ [     CXX] RISCV/python/_m5/param_GenericPciHost.cc -> .o
+ [     CXX] src/dev/pci/host.cc -> RISCV/dev/pci/host.o
+ [     CXX] RISCV/python/_m5/param_CopyEngine.cc -> .o
+ [     CXX] src/dev/pci/copy_engine.cc -> RISCV/dev/pci/copy_engine.o
+ [     CXX] RISCV/python/_m5/param_QemuFwCfgItem.cc -> .o
+ [     CXX] RISCV/python/_m5/param_QemuFwCfgItemBytes.cc -> .o
+ [     CXX] RISCV/python/_m5/param_QemuFwCfgItemFile.cc -> .o
+ [     CXX] RISCV/python/_m5/param_QemuFwCfgItemString.cc -> .o
+ [     CXX] RISCV/python/_m5/param_QemuFwCfg.cc -> .o
+ [     CXX] RISCV/python/_m5/param_QemuFwCfgIo.cc -> .o
+ [     CXX] RISCV/python/_m5/param_QemuFwCfgMmio.cc -> .o
+ [     CXX] src/dev/qemu/fw_cfg.cc -> RISCV/dev/qemu/fw_cfg.o
+ [     CXX] RISCV/python/_m5/param_Uart.cc -> .o
+ [SO Param] m5.objects.Uart, SimpleUart -> RISCV/python/_m5/param_SimpleUart.cc
+ [     CXX] RISCV/python/_m5/param_Uart8250.cc -> .o
+ [     CXX] RISCV/python/_m5/param_SimpleUart.cc -> .o
+ [     CXX] RISCV/python/_m5/param_UartLite.cc -> .o
+ [     CXX] src/dev/serial/simple.cc -> RISCV/dev/serial/simple.o
+ [     CXX] src/dev/serial/terminal.cc -> RISCV/dev/serial/terminal.o
+build/RISCV/python/_m5/param_UartLite.cc:136:55: warning: ‘NonDefaultCreate’ is deprecated: Warning: UartLite is not constructible from UartLiteParams. It is deprecated to use non-standard `create()` methods. If you see this warning followed by a linking error, the most likely problem is UartLite has a parent class with pure virtual functions. [-Wdeprecated-declarations]
+  136 |                              const UartLiteParams &>> warning_instance;
+      |                                                       ^~~~~~~~~~~~~~~~
+build/RISCV/python/_m5/param_UartLite.cc:132:38: note: declared here
+  132 |         "pure virtual functions.")]] NonDefaultCreate<true> {};
+      |                                      ^~~~~~~~~~~~~~~~~~~~~~
+ [     CXX] src/dev/serial/uart.cc -> RISCV/dev/serial/uart.o
+ [     CXX] src/dev/serial/uart8250.cc -> RISCV/dev/serial/uart8250.o
+ [     CXX] src/dev/serial/uartlite.cc -> RISCV/dev/serial/uartlite.o
+ [     CXX] src/base/date.cc -> RISCV/base/date.o
+ [    LINK]  -> RISCV/gem5.opt
+scons: done building targets.
+*** Summary of Warnings ***
+Warning: Header file <capstone/capstone.h> not found.
+         This host has no capstone library installed.
+Warning: Header file <png.h> not found.
+         This host has no libpng library.
+         Disabling support for PNG framebuffers.
+Warning: Couldn't find HDF5 C++ libraries. Disabling HDF5 support.

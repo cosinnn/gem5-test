@@ -100,6 +100,7 @@ struct IEWStruct
     bool branchMispredict[MaxThreads];
     bool branchTaken[MaxThreads];
     bool includeSquashInst[MaxThreads];
+    bool valuePredictionError[MaxThreads];
 };
 
 struct IssueStruct

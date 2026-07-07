@@ -1,0 +1,18 @@
+warn: Base 10 memory/cache size 512MB will be cast to base 2 size 512MiB.
+warn: Base 10 memory/cache size 512MB will be cast to base 2 size 512MiB.
+KeyError: 'RiscvDerivO3CPU'
+
+At:
+  configs/example/xs_cpt.py(78): build_system
+  configs/example/xs_cpt.py(103): main
+  configs/example/xs_cpt.py(113): <module>
+  src/python/m5/main.py(687): main
+gem5 Simulator System.  https://www.gem5.org
+gem5 is copyrighted software; use the --copyright option for details.
+
+gem5 version DEVELOP-FOR-25.1
+gem5 compiled Jul  6 2026 15:11:41
+gem5 started Jul  6 2026 15:12:45
+gem5 executing on LAPTOP-24Q5MFT6, pid 1226962
+command line: ./build/RISCV/gem5.opt configs/example/xs_cpt.py --generic-rv-cpt=/tmp/cpt_output_gz/test/coremark/50000/_50003_memory_.gz --cpu-type=RiscvDerivO3CPU --enable-difftest
+

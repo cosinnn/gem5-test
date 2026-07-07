@@ -69,6 +69,11 @@ DebugFlag('O3PipeView')
 DebugFlag('PCEvent')
 DebugFlag('Quiesce')
 DebugFlag('Mwait')
+DebugFlag('Diff')
+DebugFlag('Diff2')
+DebugFlag('DiffValue')
+DebugFlag('DumpCommit')
+DebugFlag('ValueCommit')
 
 CompoundFlag('ExecAll', [ 'ExecEnable', 'ExecCPSeq', 'ExecEffAddr',
     'ExecFaulting', 'ExecFetchSeq', 'ExecOpClass', 'ExecRegDelta',
@@ -118,6 +123,8 @@ Source('simple_thread.cc')
 Source('thread_context.cc')
 Source('thread_state.cc')
 Source('timing_expr.cc')
+Source('golden_global_mem.cc')
+Source('difftest.cc')
 
 if env['CONF']['USE_CAPSTONE']:
     SourceLib('capstone')

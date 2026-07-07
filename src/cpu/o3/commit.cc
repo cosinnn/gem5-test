@@ -104,6 +104,7 @@ Commit::processTrapEvent(ThreadID tid)
 Commit::Commit(CPU *_cpu, const BaseO3CPUParams &params)
     : commitPolicy(params.smtCommitPolicy),
       cpu(_cpu),
+      valuePred(params.valuePred),
       iewToCommitDelay(params.iewToCommitDelay),
       commitToIEWDelay(params.commitToIEWDelay),
       renameToROBDelay(params.renameToROBDelay),
@@ -185,7 +186,9 @@ Commit::CommitStats::CommitStats(CPU *cpu, Commit *commit)
       ADD_STAT(committedInstType, statistics::units::Count::get(),
                "Class of committed instruction"),
       ADD_STAT(commitEligibleSamples, statistics::units::Cycle::get(),
-               "number cycles where commit BW limit reached")
+               "number cycles where commit BW limit reached"),
+      ADD_STAT(squashDueToValuePrediction, statistics::units::Count::get(),
+               "Number of squashes due to value prediction errors")
 {
     using namespace statistics;
 
@@ -517,6 +520,14 @@ Commit::squashAll(ThreadID tid)
     rob->squash(squashed_inst, tid);
     changedROBNumEntries[tid] = true;
 
+    if (valuePred) {
+        DPRINTF(Commit,
+                "[ValuePred-Commit-Squash] Tid:%i Seq:%lu | "
+                "squashing (generic path)\n",
+                tid, squashed_inst);
+        valuePred->squash(tid, squashed_inst);
+    }
+
     // Send back the sequence number of the squashed instruction.
     toIEW->commitInfo[tid].doneSeqNum = squashed_inst;
 
@@ -695,6 +706,10 @@ Commit::handleInterrupt()
             cpu->checker->handlePendingInt();
         }
 
+        if (cpu->difftestEnabled()) {
+            cpu->difftestRaiseIntr(0);
+        }
+
         // CPU will handle interrupt. Note that we ignore the local copy of
         // interrupt. This is because the local copy may no longer be the
         // interrupt that the interrupt controller thinks is being handled.
@@ -794,6 +809,12 @@ Commit::commit()
                     tid,
                     fromIEW->mispredictInst[tid]->pcState().instAddr(),
                     fromIEW->squashedSeqNum[tid]);
+            } else if (fromIEW->valuePredictionError[tid]) {
+                DPRINTF(Commit,
+                    "[tid:%i] Squashing due to value prediction error "
+                    "[sn:%llu]\n",
+                    tid, fromIEW->squashedSeqNum[tid]);
+                stats.squashDueToValuePrediction++;
             } else {
                 DPRINTF(Commit,
                     "[tid:%i] Squashing due to order violation [sn:%llu]\n",
@@ -819,6 +840,10 @@ Commit::commit()
 
             rob->squash(squashed_inst, tid);
             changedROBNumEntries[tid] = true;
+
+            if (valuePred) {
+                valuePred->squash(tid, squashed_inst);
+            }
 
             toIEW->commitInfo[tid].doneSeqNum = squashed_inst;
 
@@ -1024,6 +1049,10 @@ Commit::commitInsts()
                 // Updates misc. registers.
                 head_inst->updateMiscRegs();
 
+                if (cpu->difftestEnabled()) {
+                    diffInst(tid, head_inst);
+                }
+
                 // Check instruction execution if it successfully commits and
                 // is not carrying a fault.
                 if (cpu->checker) {
@@ -1180,6 +1209,55 @@ Commit::commitHead(const DynInstPtr &head_inst, unsigned inst_num)
     // Stores mark themselves as completed.
     if (!head_inst->isStore() && inst_fault == NoFault) {
         head_inst->setCompleted();
+    }
+
+    // Value prediction: train predictor at commit time
+    if (valuePred && head_inst->canLVP() && (inst_fault == NoFault)) {
+        // Capture actual load value from the instruction result
+        if (head_inst->isLoad() || head_inst->isStore()) {
+            head_inst->actualValue = head_inst->readIntResult();
+        }
+
+        // Detect misprediction by comparing predicted vs actual
+        if (head_inst->vpResult.speculative &&
+            head_inst->vpResult.value != head_inst->actualValue) {
+            head_inst->vpMisprediction = true;
+        }
+
+        valuepred::VPUpdateMetaData *updateMetaData =
+            valuepred::VPDataStructFactory::buildUpdateMetaData(
+                valuePred->getValuePredictorType());
+        updateMetaData->pc = head_inst->pcState().instAddr();
+        updateMetaData->seq_no = head_inst->seqNum;
+        updateMetaData->tid = tid;
+        updateMetaData->actualValue = head_inst->actualValue;
+        updateMetaData->isMisprediction = head_inst->vpMisprediction;
+
+        DPRINTF(Commit,
+                "[ValuePred-Commit-Train] Tid:%i Seq:%lu PC:%#lx | "
+                "actual=%#lx, was_predicted=%s, mispred=%s\n",
+                tid, head_inst->seqNum, head_inst->pcState().instAddr(),
+                head_inst->actualValue,
+                head_inst->vpResult.speculative ? "yes" : "no",
+                head_inst->vpMisprediction ? "YES" : "no");
+
+        valuePred->updateValuePredictor(updateMetaData);
+        valuePred->stats.VPsupported++;
+        if (head_inst->vpResult.speculative) {
+            valuePred->stats.VPpredicted++;
+            if (!head_inst->vpMisprediction) {
+                valuePred->stats.VPcorrected++;
+            }
+        }
+
+        DPRINTF(Commit,
+                "[ValuePred-Commit-Train] stats: supported=%lu, "
+                "predicted=%lu, corrected=%lu\n",
+                valuePred->stats.VPsupported.value(),
+                valuePred->stats.VPpredicted.value(),
+                valuePred->stats.VPcorrected.value());
+
+        delete updateMetaData;
     }
 
     if (inst_fault != NoFault) {
@@ -1531,6 +1609,30 @@ Commit::oldestReady()
     } else {
         return InvalidThreadID;
     }
+}
+
+void
+Commit::diffInst(ThreadID tid, const DynInstPtr &inst)
+{
+    cpu->diffInfo.lastCommittedMsg.push(inst);
+    if (cpu->diffInfo.lastCommittedMsg.size() > 20) {
+        cpu->diffInfo.lastCommittedMsg.pop();
+    }
+    cpu->diffInfo.inst = inst->staticInst;
+    cpu->diffInfo.pc = &inst->pcState();
+    cpu->diffInfo.instFault = inst->getFault();
+    for (int i = 0; i < inst->numDestRegs(); i++) {
+        const auto &dest = inst->destRegIdx(i);
+        if ((dest.is(FloatRegClass) || dest.is(IntRegClass)) &&
+            !(dest.is(IntRegClass) && dest.index() == 0)) {
+            cpu->diffInfo.scalarResults.at(i) = cpu->getArchReg(dest, tid);
+        }
+    }
+
+    cpu->diffInfo.curInstStrictOrdered = inst->strictlyOrdered();
+    cpu->diffInfo.physEffAddr = inst->physEffAddr;
+    cpu->diffInfo.effSize = inst->effSize;
+    cpu->difftestStep(tid, inst->seqNum);
 }
 
 } // namespace o3

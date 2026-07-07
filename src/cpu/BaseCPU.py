@@ -170,6 +170,14 @@ class BaseCPU(ClockedObject):
     _uncached_interrupt_response_ports = []
     _uncached_interrupt_request_ports = []
 
+    enable_difftest = Param.Bool(False, "use NEMU as ref to difftest")
+    dump_commit = Param.Bool(False, "dump commit log")
+    dump_start = Param.Int(0, "dump start num")
+    difftest_ref_so = Param.String("", "The reference so for online difftest")
+    enable_riscv_vector = Param.Bool(False, "Enable riscv vector extension")
+    enable_riscv_h = Param.Bool(True, "Enable riscv hypervisor extension")
+    enable_skip_csr = Param.Bool(True, "Enable skip csr")
+
     def createInterruptController(self):
         self.interrupts = [
             self.ArchInterrupts() for i in range(self.numThreads)

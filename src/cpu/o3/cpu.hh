@@ -65,10 +65,13 @@
 #include "cpu/o3/rob.hh"
 #include "cpu/o3/scoreboard.hh"
 #include "cpu/o3/thread_state.hh"
+#include "cpu/valuepred/valuepred_unit.hh"
 #include "cpu/simple_thread.hh"
 #include "cpu/timebuf.hh"
 #include "params/BaseO3CPU.hh"
 #include "sim/process.hh"
+
+#include "cpu/difftest.hh"
 
 namespace gem5
 {
@@ -201,6 +204,12 @@ class CPU : public BaseCPU
     {
         return activeThreads.size();
     }
+
+    /** Is the value prediction unit enabled? */
+    bool isValuePredictorEnabled() const { return valuePred != nullptr; }
+
+    /** Get the value prediction unit pointer. */
+    valuepred::VPUnit *getValuePredictor() const { return valuePred; }
 
     /** Add Thread to Active Threads List */
     void activateThread(ThreadID tid);
@@ -411,6 +420,9 @@ class CPU : public BaseCPU
     /** The branch and PC address calculation stage. */
     BAC bac;
 
+    /** Pointer to the value prediction unit. */
+    valuepred::VPUnit *valuePred;
+
     /** The Fetch taget queue. */
     FTQ ftq;
 
@@ -615,6 +627,16 @@ class CPU : public BaseCPU
     // hardware transactional memory
     void htmSendAbortSignal(ThreadID tid, uint64_t htm_uid,
                             HtmFailureFaultCause cause) override;
+
+    // difftest
+    void readGem5Regs(ThreadID tid) override;
+    RegVal diffReadMiscRegNoEffect(int misc_reg, ThreadID tid) const override;
+    RegVal diffReadMiscReg(int misc_reg, ThreadID tid) override;
+    void diffSetMiscRegNoEffect(int misc_reg, RegVal val, ThreadID tid) override;
+
+  private:
+    RegVal readArchIntReg(int reg_idx, ThreadID tid);
+    RegVal readArchFloatReg(int reg_idx, ThreadID tid);
 };
 
 } // namespace o3

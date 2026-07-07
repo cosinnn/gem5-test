@@ -121,7 +121,10 @@ class System(SimObject):
     gcpt_file = Param.String(
         "", "Xiangshan checkpoint image file"
     )
-    
+
+    enable_difftest = Param.Bool(False, "Enable RISC-V difftest")
+    enable_mem_dedup = Param.Bool(False, "Enable memory deduplication")
+
     cache_line_size = Param.Unsigned(64, "Cache line size in bytes")
 
     redirect_paths = VectorParam.RedirectPath([], "Path redirections")

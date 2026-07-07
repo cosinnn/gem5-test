@@ -1,0 +1,44 @@
+warn: Base 10 memory/cache size 512MB will be cast to base 2 size 512MiB.
+warn: Base 10 memory/cache size 512MB will be cast to base 2 size 512MiB.
+warn: Base 10 memory/cache size 32kB will be cast to base 2 size 32KiB.
+warn: Base 10 memory/cache size 32kB will be cast to base 2 size 32KiB.
+Global frequency set at 1000000000000 ticks per second
+warn: No dot file generated. Please install pydot to generate the dot file and pdf.
+src/arch/riscv/bare_metal/fs_workload.cc:63: info: No bootload provided, because using XS GCPT, reset to 0x80000000
+src/base/statistics.hh:279: warn: One of the stats is a legacy stat. Legacy stat is a stat that does not belong to any statistics::Group. Legacy stat is deprecated.
+src/cpu/base.cc:255: warn: difftest hart id set to 0 for tid 0
+Using /home/cosin/xs-gem5/NEMU/build/riscv64-nemu-interpreter-so for difftest
+src/cpu/base.cc:266: warn: Difftest is enabled with ref so: /home/cosin/xs-gem5/NEMU/build/riscv64-nemu-interpreter-so.
+src/base/stats/storage.hh:278: warn: Bucket size (4) does not divide range [1:32] into equal-sized buckets. Rounding up.
+src/base/stats/storage.hh:278: warn: Bucket size (4) does not divide range [1:8] into equal-sized buckets. Rounding up.
+      0: system.rtc: Real-time clock set to Sun Jan  1 00:00:00 2012
+src/dev/riscv/clint.cc:202: warn: Set Clint to RiscvSystem failed.
+system.remote_gdb: Listening for connections on port 7000
+src/mem/physical.cc:528: warn: Unserializing physical memory from file /tmp/cpt_output_gz/test/coremark/50000/_50003_memory_.gz
+src/sim/system.cc:554: info: Restored from Xiangshan RISC-V Checkpoint
+gem5 Simulator System.  https://www.gem5.org
+gem5 is copyrighted software; use the --copyright option for details.
+
+gem5 version DEVELOP-FOR-25.1
+gem5 compiled Jul  7 2026 16:07:28
+gem5 started Jul  7 2026 19:38:19
+gem5 executing on LAPTOP-24Q5MFT6, pid 192036
+command line: ./build/RISCV/gem5.opt configs/example/xs_cpt.py --generic-rv-cpt=/tmp/cpt_output_gz/test/coremark/50000/_50003_memory_.gz --cpu-type=RiscvO3CPU --enable-difftest
+
+Obtained ref_so: /home/cosin/xs-gem5/NEMU/build/riscv64-nemu-interpreter-so
+src/dev/serial/uartlite.cc:35: warn: Write to other uartlite addr 12 is not implemented
+Running CoreMark for 2 iterations
+2K performance run parameters for coremark.
+CoreMark Size    : 666
+Total time (ms)  : 334
+Iterations       : 2
+Compiler version : GCC13.2.0
+seedcrc          : 0xe9f5
+[0]crclist       : 0xe714
+[0]crcmatrix     : 0x1fd7
+[0]crcstate      : 0x8e3a
+[0]crcfinal      : 0x72be
+Finished in 334 ms.
+==================================================
+CoreMark Iterations/Sec 5988
+src/cpu/o3/fetch.cc:604: warn: Address 0 is outside of physical memory, stopping fetch
