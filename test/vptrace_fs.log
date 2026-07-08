@@ -1,91 +1,67 @@
       0: system.rtc: Real-time clock set to Sun Jan  1 00:00:00 2012
       0: IdealConstantLVP: [IdealConstantLVP::squash] Tid:0 Seq:0 | NO-OP (stateless)
-  45000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:4 PC:0x8000000c |   45000: IdealConstantLVP: MISS => NO_PREDICTION
-  53000: IdealConstantLVP: [IdealConstantLVP::squash] Tid:0 Seq:6 | NO-OP (stateless)
-  55000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:30 PC:0x8000000c |   55000: IdealConstantLVP: MISS => NO_PREDICTION
-  62000: IdealConstantLVP: [IdealConstantLVP::squash] Tid:0 Seq:32 | NO-OP (stateless)
-  64000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:43 PC:0x8000000c |   64000: IdealConstantLVP: MISS => NO_PREDICTION
-  71000: IdealConstantLVP: [IdealConstantLVP::squash] Tid:0 Seq:45 | NO-OP (stateless)
-  73000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:56 PC:0x8000000c |   73000: IdealConstantLVP: MISS => NO_PREDICTION
-  80000: IdealConstantLVP: [IdealConstantLVP::squash] Tid:0 Seq:58 | NO-OP (stateless)
-  82000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:69 PC:0x8000000c |   82000: IdealConstantLVP: MISS => NO_PREDICTION
-  89000: IdealConstantLVP: [IdealConstantLVP::squash] Tid:0 Seq:71 | NO-OP (stateless)
-  91000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:82 PC:0x8000000c |   91000: IdealConstantLVP: MISS => NO_PREDICTION
-  98000: IdealConstantLVP: [IdealConstantLVP::squash] Tid:0 Seq:84 | NO-OP (stateless)
- 100000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:95 PC:0x8000000c |  100000: IdealConstantLVP: MISS => NO_PREDICTION
- 100000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:4 PC:0x8000000c | ALLOC (new_entry, init_value=0x10031b)
- 101000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:30 PC:0x8000000c | TRAIN: MATCH (stored=0x10031b, actual=0x10031b) conf: 0 -> 1 [INC]
- 101000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:43 PC:0x8000000c | TRAIN: MATCH (stored=0x10031b, actual=0x10031b) conf: 1 -> 2 [INC]
- 101000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:56 PC:0x8000000c | TRAIN: MATCH (stored=0x10031b, actual=0x10031b) conf: 2 -> 3 [INC]
- 102000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:69 PC:0x8000000c | TRAIN: MATCH (stored=0x10031b, actual=0x10031b) conf: 3 -> 4 [INC]
- 106000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:82 PC:0x8000000c | TRAIN: MATCH (stored=0x10031b, actual=0x10031b) conf: 4 -> 5 [INC]
- 107000: IdealConstantLVP: [IdealConstantLVP::squash] Tid:0 Seq:97 | NO-OP (stateless)
- 109000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:108 PC:0x8000000c |  109000: IdealConstantLVP: HIT (conf=5/7, saturated=no, stored_value=0x10031b) =>  109000: IdealConstantLVP: SKIP (not saturated)
- 109000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:95 PC:0x8000000c | TRAIN: MATCH (stored=0x10031b, actual=0x10031b) conf: 5 -> 6 [INC]
- 116000: IdealConstantLVP: [IdealConstantLVP::squash] Tid:0 Seq:110 | NO-OP (stateless)
- 118000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:121 PC:0x8000000c |  118000: IdealConstantLVP: HIT (conf=6/7, saturated=no, stored_value=0x10031b) =>  118000: IdealConstantLVP: SKIP (not saturated)
- 118000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:108 PC:0x8000000c | TRAIN: MATCH (stored=0x10031b, actual=0x10031b) conf: 6 -> 7 [INC]
- 125000: IdealConstantLVP: [IdealConstantLVP::squash] Tid:0 Seq:123 | NO-OP (stateless)
- 127000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:134 PC:0x8000000c |  127000: IdealConstantLVP: HIT (conf=7/7, saturated=yes, stored_value=0x10031b) =>  127000: IdealConstantLVP: PREDICT value=0x10031b
- 127000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:121 PC:0x8000000c | TRAIN: MATCH (stored=0x10031b, actual=0x10031b) conf: 7 -> 7 [INC]
- 134000: IdealConstantLVP: [IdealConstantLVP::squash] Tid:0 Seq:136 | NO-OP (stateless)
- 136000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:147 PC:0x8000000c |  136000: IdealConstantLVP: HIT (conf=7/7, saturated=yes, stored_value=0x10031b) =>  136000: IdealConstantLVP: PREDICT value=0x10031b
- 136000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:134 PC:0x8000000c | TRAIN: MATCH (stored=0x10031b, actual=0x10031b) conf: 7 -> 7 [INC]
- 143000: IdealConstantLVP: [IdealConstantLVP::squash] Tid:0 Seq:149 | NO-OP (stateless)
- 145000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:160 PC:0x8000000c |  145000: IdealConstantLVP: HIT (conf=7/7, saturated=yes, stored_value=0x10031b) =>  145000: IdealConstantLVP: PREDICT value=0x10031b
- 145000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:147 PC:0x8000000c | TRAIN: MATCH (stored=0x10031b, actual=0x10031b) conf: 7 -> 7 [INC]
- 152000: IdealConstantLVP: [IdealConstantLVP::squash] Tid:0 Seq:162 | NO-OP (stateless)
- 154000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:173 PC:0x8000000c |  154000: IdealConstantLVP: HIT (conf=7/7, saturated=yes, stored_value=0x10031b) =>  154000: IdealConstantLVP: PREDICT value=0x10031b
- 154000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:160 PC:0x8000000c | TRAIN: MATCH (stored=0x10031b, actual=0x10031b) conf: 7 -> 7 [INC]
- 161000: IdealConstantLVP: [IdealConstantLVP::squash] Tid:0 Seq:175 | NO-OP (stateless)
- 163000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:186 PC:0x8000000c |  163000: IdealConstantLVP: HIT (conf=7/7, saturated=yes, stored_value=0x10031b) =>  163000: IdealConstantLVP: PREDICT value=0x10031b
- 163000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:173 PC:0x8000000c | TRAIN: MATCH (stored=0x10031b, actual=0x10031b) conf: 7 -> 7 [INC]
- 170000: IdealConstantLVP: [IdealConstantLVP::squash] Tid:0 Seq:188 | NO-OP (stateless)
- 172000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:199 PC:0x8000000c |  172000: IdealConstantLVP: HIT (conf=7/7, saturated=yes, stored_value=0x10031b) =>  172000: IdealConstantLVP: PREDICT value=0x10031b
- 172000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:186 PC:0x8000000c | TRAIN: MATCH (stored=0x10031b, actual=0x10031b) conf: 7 -> 7 [INC]
- 173000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:202 PC:0x8000000c |  173000: IdealConstantLVP: HIT (conf=7/7, saturated=yes, stored_value=0x10031b) =>  173000: IdealConstantLVP: PREDICT value=0x10031b
- 174000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:205 PC:0x8000000c |  174000: IdealConstantLVP: HIT (conf=7/7, saturated=yes, stored_value=0x10031b) =>  174000: IdealConstantLVP: PREDICT value=0x10031b
- 175000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:208 PC:0x8000000c |  175000: IdealConstantLVP: HIT (conf=7/7, saturated=yes, stored_value=0x10031b) =>  175000: IdealConstantLVP: PREDICT value=0x10031b
- 176000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:211 PC:0x8000000c |  176000: IdealConstantLVP: HIT (conf=7/7, saturated=yes, stored_value=0x10031b) =>  176000: IdealConstantLVP: PREDICT value=0x10031b
- 177000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:214 PC:0x8000000c |  177000: IdealConstantLVP: HIT (conf=7/7, saturated=yes, stored_value=0x10031b) =>  177000: IdealConstantLVP: PREDICT value=0x10031b
- 178000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:217 PC:0x8000000c |  178000: IdealConstantLVP: HIT (conf=7/7, saturated=yes, stored_value=0x10031b) =>  178000: IdealConstantLVP: PREDICT value=0x10031b
- 179000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:220 PC:0x8000000c |  179000: IdealConstantLVP: HIT (conf=7/7, saturated=yes, stored_value=0x10031b) =>  179000: IdealConstantLVP: PREDICT value=0x10031b
- 180000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:223 PC:0x8000000c |  180000: IdealConstantLVP: HIT (conf=7/7, saturated=yes, stored_value=0x10031b) =>  180000: IdealConstantLVP: PREDICT value=0x10031b
- 181000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:226 PC:0x8000000c |  181000: IdealConstantLVP: HIT (conf=7/7, saturated=yes, stored_value=0x10031b) =>  181000: IdealConstantLVP: PREDICT value=0x10031b
- 181000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:199 PC:0x8000000c | TRAIN: MATCH (stored=0x10031b, actual=0x10031b) conf: 7 -> 7 [INC]
- 182000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:229 PC:0x8000000c |  182000: IdealConstantLVP: HIT (conf=7/7, saturated=yes, stored_value=0x10031b) =>  182000: IdealConstantLVP: PREDICT value=0x10031b
- 182000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:202 PC:0x8000000c | TRAIN: MATCH (stored=0x10031b, actual=0x10031b) conf: 7 -> 7 [INC]
- 183000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:232 PC:0x8000000c |  183000: IdealConstantLVP: HIT (conf=7/7, saturated=yes, stored_value=0x10031b) =>  183000: IdealConstantLVP: PREDICT value=0x10031b
- 183000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:205 PC:0x8000000c | TRAIN: MATCH (stored=0x10031b, actual=0x10031b) conf: 7 -> 7 [INC]
- 184000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:235 PC:0x8000000c |  184000: IdealConstantLVP: HIT (conf=7/7, saturated=yes, stored_value=0x10031b) =>  184000: IdealConstantLVP: PREDICT value=0x10031b
- 184000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:208 PC:0x8000000c | TRAIN: MATCH (stored=0x10031b, actual=0x10031b) conf: 7 -> 7 [INC]
- 185000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:238 PC:0x8000000c |  185000: IdealConstantLVP: HIT (conf=7/7, saturated=yes, stored_value=0x10031b) =>  185000: IdealConstantLVP: PREDICT value=0x10031b
- 185000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:211 PC:0x8000000c | TRAIN: MATCH (stored=0x10031b, actual=0x10031b) conf: 7 -> 7 [INC]
- 186000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:241 PC:0x8000000c |  186000: IdealConstantLVP: HIT (conf=7/7, saturated=yes, stored_value=0x10031b) =>  186000: IdealConstantLVP: PREDICT value=0x10031b
- 186000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:214 PC:0x8000000c | TRAIN: MATCH (stored=0x10031b, actual=0x10031b) conf: 7 -> 7 [INC]
- 187000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:244 PC:0x8000000c |  187000: IdealConstantLVP: HIT (conf=7/7, saturated=yes, stored_value=0x10031b) =>  187000: IdealConstantLVP: PREDICT value=0x10031b
- 187000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:217 PC:0x8000000c | TRAIN: MATCH (stored=0x10031b, actual=0x10031b) conf: 7 -> 7 [INC]
- 188000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:247 PC:0x8000000c |  188000: IdealConstantLVP: HIT (conf=7/7, saturated=yes, stored_value=0x10031b) =>  188000: IdealConstantLVP: PREDICT value=0x10031b
- 188000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:220 PC:0x8000000c | TRAIN: MATCH (stored=0x10031b, actual=0x10031b) conf: 7 -> 7 [INC]
- 189000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:250 PC:0x8000000c |  189000: IdealConstantLVP: HIT (conf=7/7, saturated=yes, stored_value=0x10031b) =>  189000: IdealConstantLVP: PREDICT value=0x10031b
- 189000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:223 PC:0x8000000c | TRAIN: MATCH (stored=0x10031b, actual=0x10031b) conf: 7 -> 7 [INC]
- 190000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:253 PC:0x8000000c |  190000: IdealConstantLVP: HIT (conf=7/7, saturated=yes, stored_value=0x10031b) =>  190000: IdealConstantLVP: PREDICT value=0x10031b
- 190000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:226 PC:0x8000000c | TRAIN: MATCH (stored=0x10031b, actual=0x10031b) conf: 7 -> 7 [INC]
- 191000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:256 PC:0x8000000c |  191000: IdealConstantLVP: HIT (conf=7/7, saturated=yes, stored_value=0x10031b) =>  191000: IdealConstantLVP: PREDICT value=0x10031b
- 191000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:229 PC:0x8000000c | TRAIN: MATCH (stored=0x10031b, actual=0x10031b) conf: 7 -> 7 [INC]
- 192000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:259 PC:0x8000000c |  192000: IdealConstantLVP: HIT (conf=7/7, saturated=yes, stored_value=0x10031b) =>  192000: IdealConstantLVP: PREDICT value=0x10031b
- 192000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:232 PC:0x8000000c | TRAIN: MATCH (stored=0x10031b, actual=0x10031b) conf: 7 -> 7 [INC]
- 193000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:262 PC:0x8000000c |  193000: IdealConstantLVP: HIT (conf=7/7, saturated=yes, stored_value=0x10031b) =>  193000: IdealConstantLVP: PREDICT value=0x10031b
- 193000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:235 PC:0x8000000c | TRAIN: MATCH (stored=0x10031b, actual=0x10031b) conf: 7 -> 7 [INC]
- 194000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:265 PC:0x8000000c |  194000: IdealConstantLVP: HIT (conf=7/7, saturated=yes, stored_value=0x10031b) =>  194000: IdealConstantLVP: PREDICT value=0x10031b
- 194000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:238 PC:0x8000000c | TRAIN: MATCH (stored=0x10031b, actual=0x10031b) conf: 7 -> 7 [INC]
- 195000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:268 PC:0x8000000c |  195000: IdealConstantLVP: HIT (conf=7/7, saturated=yes, stored_value=0x10031b) =>  195000: IdealConstantLVP: PREDICT value=0x10031b
- 195000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:241 PC:0x8000000c | TRAIN: MATCH (stored=0x10031b, actual=0x10031b) conf: 7 -> 7 [INC]
- 196000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:271 PC:0x8000000c |  196000: IdealConstantLVP: HIT (conf=7/7, saturated=yes, stored_value=0x10031b) =>  196000: IdealConstantLVP: PREDICT value=0x10031b
- 196000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:244 PC:0x8000000c | TRAIN: MATCH (stored=0x10031b, actual=0x10031b) conf: 7 -> 7 [INC]
- 197000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:274 PC:0x8000000c |  197000: IdealConstantLVP: HIT (conf=7/7, saturated=yes, stored_value=0x10031b) =>  197000: IdealConstantLVP: PREDICT value=0x10031b
- 197000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:247 PC:0x8000000c | TRAIN: MATCH (stored=0x10031b, actual=0x10031b) conf: 7 -> 7 [INC]
- 198000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:277 PC:0x8000000c |  198000: IdealConstantLVP: HIT (conf=7/7, saturated=yes, stored_value=0x10031b) =>  198000: IdealConstantLVP: PREDICT value=0x10031b
- 198000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:250 PC:0x8000000c | TRAIN: MATCH (stored=0x10031b, actual=0x10031b) conf: 7 -> 7 [INC]
- 199000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:280 PC:0x8000000c |  199000: IdealConstantLVP: HIT (conf=7/7, saturated=yes, stored_value=0x10031b) =>  199000: IdealConstantLVP: PREDICT value=0x10031b
- 199000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:253 PC:0x8000000c | TRAIN: MATCH (stored=0x10031b, actual=0x10031b) conf: 7 -> 7 [INC]
+  46000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:14 PC:0x80000034 |   46000: IdealConstantLVP: MISS => NO_PREDICTION
+  51000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:17 PC:0x80000034 |   51000: IdealConstantLVP: MISS => NO_PREDICTION
+  57000: IdealConstantLVP: [IdealConstantLVP::squash] Tid:0 Seq:19 | NO-OP (stateless)
+  59000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:17 PC:0x80000034 | ALLOC (new_entry, init_value=0x42)
+  96000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:40 PC:0x80000034 |   96000: IdealConstantLVP: HIT (conf=0/7, saturated=no, stored_value=0x42) =>   96000: IdealConstantLVP: SKIP (not saturated)
+  98000: IdealConstantLVP: [IdealConstantLVP::squash] Tid:0 Seq:21 | NO-OP (stateless)
+ 102000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:50 PC:0x80000034 |  102000: IdealConstantLVP: HIT (conf=0/7, saturated=no, stored_value=0x42) =>  102000: IdealConstantLVP: SKIP (not saturated)
+ 106000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:64 PC:0x80000034 |  106000: IdealConstantLVP: HIT (conf=0/7, saturated=no, stored_value=0x42) =>  106000: IdealConstantLVP: SKIP (not saturated)
+ 108000: IdealConstantLVP: [IdealConstantLVP::squash] Tid:0 Seq:52 | NO-OP (stateless)
+ 111000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:50 PC:0x80000034 | TRAIN: MATCH (stored=0x42, actual=0x42) conf: 0 -> 1 [INC]
+ 114000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:82 PC:0x80000034 |  114000: IdealConstantLVP: HIT (conf=1/7, saturated=no, stored_value=0x42) =>  114000: IdealConstantLVP: SKIP (not saturated)
+ 118000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:96 PC:0x80000034 |  118000: IdealConstantLVP: HIT (conf=1/7, saturated=no, stored_value=0x42) =>  118000: IdealConstantLVP: SKIP (not saturated)
+ 119000: IdealConstantLVP: [IdealConstantLVP::squash] Tid:0 Seq:75 | NO-OP (stateless)
+ 123000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:99 PC:0x80000034 |  123000: IdealConstantLVP: HIT (conf=1/7, saturated=no, stored_value=0x42) =>  123000: IdealConstantLVP: SKIP (not saturated)
+ 127000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:113 PC:0x80000034 |  127000: IdealConstantLVP: HIT (conf=1/7, saturated=no, stored_value=0x42) =>  127000: IdealConstantLVP: SKIP (not saturated)
+ 129000: IdealConstantLVP: [IdealConstantLVP::squash] Tid:0 Seq:101 | NO-OP (stateless)
+ 132000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:99 PC:0x80000034 | TRAIN: MATCH (stored=0x42, actual=0x42) conf: 1 -> 2 [INC]
+ 135000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:131 PC:0x80000034 |  135000: IdealConstantLVP: HIT (conf=2/7, saturated=no, stored_value=0x42) =>  135000: IdealConstantLVP: SKIP (not saturated)
+ 139000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:145 PC:0x80000034 |  139000: IdealConstantLVP: HIT (conf=2/7, saturated=no, stored_value=0x42) =>  139000: IdealConstantLVP: SKIP (not saturated)
+ 140000: IdealConstantLVP: [IdealConstantLVP::squash] Tid:0 Seq:124 | NO-OP (stateless)
+ 144000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:148 PC:0x80000034 |  144000: IdealConstantLVP: HIT (conf=2/7, saturated=no, stored_value=0x42) =>  144000: IdealConstantLVP: SKIP (not saturated)
+ 148000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:162 PC:0x80000034 |  148000: IdealConstantLVP: HIT (conf=2/7, saturated=no, stored_value=0x42) =>  148000: IdealConstantLVP: SKIP (not saturated)
+ 150000: IdealConstantLVP: [IdealConstantLVP::squash] Tid:0 Seq:150 | NO-OP (stateless)
+ 153000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:148 PC:0x80000034 | TRAIN: MATCH (stored=0x42, actual=0x42) conf: 2 -> 3 [INC]
+ 156000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:180 PC:0x80000034 |  156000: IdealConstantLVP: HIT (conf=3/7, saturated=no, stored_value=0x42) =>  156000: IdealConstantLVP: SKIP (not saturated)
+ 160000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:194 PC:0x80000034 |  160000: IdealConstantLVP: HIT (conf=3/7, saturated=no, stored_value=0x42) =>  160000: IdealConstantLVP: SKIP (not saturated)
+ 161000: IdealConstantLVP: [IdealConstantLVP::squash] Tid:0 Seq:173 | NO-OP (stateless)
+ 165000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:197 PC:0x80000034 |  165000: IdealConstantLVP: HIT (conf=3/7, saturated=no, stored_value=0x42) =>  165000: IdealConstantLVP: SKIP (not saturated)
+ 169000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:211 PC:0x80000034 |  169000: IdealConstantLVP: HIT (conf=3/7, saturated=no, stored_value=0x42) =>  169000: IdealConstantLVP: SKIP (not saturated)
+ 171000: IdealConstantLVP: [IdealConstantLVP::squash] Tid:0 Seq:199 | NO-OP (stateless)
+ 174000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:197 PC:0x80000034 | TRAIN: MATCH (stored=0x42, actual=0x42) conf: 3 -> 4 [INC]
+ 177000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:229 PC:0x80000034 |  177000: IdealConstantLVP: HIT (conf=4/7, saturated=no, stored_value=0x42) =>  177000: IdealConstantLVP: SKIP (not saturated)
+ 181000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:243 PC:0x80000034 |  181000: IdealConstantLVP: HIT (conf=4/7, saturated=no, stored_value=0x42) =>  181000: IdealConstantLVP: SKIP (not saturated)
+ 182000: IdealConstantLVP: [IdealConstantLVP::squash] Tid:0 Seq:222 | NO-OP (stateless)
+ 186000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:246 PC:0x80000034 |  186000: IdealConstantLVP: HIT (conf=4/7, saturated=no, stored_value=0x42) =>  186000: IdealConstantLVP: SKIP (not saturated)
+ 190000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:260 PC:0x80000034 |  190000: IdealConstantLVP: HIT (conf=4/7, saturated=no, stored_value=0x42) =>  190000: IdealConstantLVP: SKIP (not saturated)
+ 192000: IdealConstantLVP: [IdealConstantLVP::squash] Tid:0 Seq:248 | NO-OP (stateless)
+ 195000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:246 PC:0x80000034 | TRAIN: MATCH (stored=0x42, actual=0x42) conf: 4 -> 5 [INC]
+ 198000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:278 PC:0x80000034 |  198000: IdealConstantLVP: HIT (conf=5/7, saturated=no, stored_value=0x42) =>  198000: IdealConstantLVP: SKIP (not saturated)
+ 202000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:292 PC:0x80000034 |  202000: IdealConstantLVP: HIT (conf=5/7, saturated=no, stored_value=0x42) =>  202000: IdealConstantLVP: SKIP (not saturated)
+ 203000: IdealConstantLVP: [IdealConstantLVP::squash] Tid:0 Seq:271 | NO-OP (stateless)
+ 207000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:295 PC:0x80000034 |  207000: IdealConstantLVP: HIT (conf=5/7, saturated=no, stored_value=0x42) =>  207000: IdealConstantLVP: SKIP (not saturated)
+ 211000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:309 PC:0x80000034 |  211000: IdealConstantLVP: HIT (conf=5/7, saturated=no, stored_value=0x42) =>  211000: IdealConstantLVP: SKIP (not saturated)
+ 213000: IdealConstantLVP: [IdealConstantLVP::squash] Tid:0 Seq:297 | NO-OP (stateless)
+ 216000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:295 PC:0x80000034 | TRAIN: MATCH (stored=0x42, actual=0x42) conf: 5 -> 6 [INC]
+ 219000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:327 PC:0x80000034 |  219000: IdealConstantLVP: HIT (conf=6/7, saturated=no, stored_value=0x42) =>  219000: IdealConstantLVP: SKIP (not saturated)
+ 223000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:341 PC:0x80000034 |  223000: IdealConstantLVP: HIT (conf=6/7, saturated=no, stored_value=0x42) =>  223000: IdealConstantLVP: SKIP (not saturated)
+ 224000: IdealConstantLVP: [IdealConstantLVP::squash] Tid:0 Seq:320 | NO-OP (stateless)
+ 228000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:344 PC:0x80000034 |  228000: IdealConstantLVP: HIT (conf=6/7, saturated=no, stored_value=0x42) =>  228000: IdealConstantLVP: SKIP (not saturated)
+ 232000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:358 PC:0x80000034 |  232000: IdealConstantLVP: HIT (conf=6/7, saturated=no, stored_value=0x42) =>  232000: IdealConstantLVP: SKIP (not saturated)
+ 234000: IdealConstantLVP: [IdealConstantLVP::squash] Tid:0 Seq:346 | NO-OP (stateless)
+ 237000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:344 PC:0x80000034 | TRAIN: MATCH (stored=0x42, actual=0x42) conf: 6 -> 7 [INC]
+ 240000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:376 PC:0x80000034 |  240000: IdealConstantLVP: HIT (conf=7/7, saturated=yes, stored_value=0x42) =>  240000: IdealConstantLVP: PREDICT value=0x42
+ 244000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:390 PC:0x80000034 |  244000: IdealConstantLVP: HIT (conf=7/7, saturated=yes, stored_value=0x42) =>  244000: IdealConstantLVP: PREDICT value=0x42
+ 247000: IdealConstantLVP: [IdealConstantLVP::squash] Tid:0 Seq:375 | NO-OP (stateless)
+ 249000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:400 PC:0x80000034 |  249000: IdealConstantLVP: HIT (conf=7/7, saturated=yes, stored_value=0x42) =>  249000: IdealConstantLVP: PREDICT value=0x42
+ 253000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:414 PC:0x80000034 |  253000: IdealConstantLVP: HIT (conf=7/7, saturated=yes, stored_value=0x42) =>  253000: IdealConstantLVP: PREDICT value=0x42
+ 256000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:400 PC:0x80000034 | TRAIN: MISMATCH (stored=0x42, actual=0x99) conf: 7 -> 0 [RESET], new_value=0x99
+ 257000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:428 PC:0x80000034 |  257000: IdealConstantLVP: HIT (conf=0/7, saturated=no, stored_value=0x99) =>  257000: IdealConstantLVP: SKIP (not saturated)
+ 257000: IdealConstantLVP: [IdealConstantLVP::squash] Tid:0 Seq:400 | NO-OP (stateless)
+ 258000: IdealConstantLVP: [IdealConstantLVP::update] Tid:0 Seq:400 PC:0x80000034 | TRAIN: MATCH (stored=0x99, actual=0x99) conf: 0 -> 1 [INC]
+ 265000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:444 PC:0x80000034 |  265000: IdealConstantLVP: HIT (conf=1/7, saturated=no, stored_value=0x99) =>  265000: IdealConstantLVP: SKIP (not saturated)
+ 269000: IdealConstantLVP: [IdealConstantLVP::valuePredict] Tid:0 Seq:458 PC:0x80000034 |  269000: IdealConstantLVP: HIT (conf=1/7, saturated=no, stored_value=0x99) =>  269000: IdealConstantLVP: SKIP (not saturated)
+ 269000: IdealConstantLVP: [IdealConstantLVP::squash] Tid:0 Seq:438 | NO-OP (stateless)
+ 296000: IdealConstantLVP: [IdealConstantLVP::squash] Tid:0 Seq:464 | NO-OP (stateless)

@@ -537,6 +537,32 @@ IEW::squashDueToMemOrder(const DynInstPtr& inst, ThreadID tid)
 }
 
 void
+IEW::squashDueToValuePrediction(const DynInstPtr &inst, ThreadID tid)
+{
+    DPRINTF(IEW, "[tid:%i] value prediction error, squashing violator "
+            "and younger insts, PC: %s [sn:%llu].\n",
+            tid, inst->pcState(), inst->seqNum);
+    if (!toCommit->squash[tid] || inst->seqNum < toCommit->squashedSeqNum[tid]) {
+        toCommit->squash[tid] = true;
+
+        toCommit->valuePredictionError[tid] = true;
+        toCommit->squashedSeqNum[tid] = inst->seqNum;
+        set(toCommit->pc[tid], inst->pcState());
+
+        // advance pc to next instruction
+        inst->staticInst->advancePC(*toCommit->pc[tid]);
+
+        toCommit->mispredictInst[tid] = NULL;
+
+        // Even speculatively executed value prediction instructions cannot
+        // be squashed after obtaining a correct result.
+        toCommit->includeSquashInst[tid] = false;
+
+        wroteToTimeBuffer = true;
+    }
+}
+
+void
 IEW::block(ThreadID tid)
 {
     DPRINTF(IEW, "[tid:%i] Blocking.\n", tid);
@@ -1446,14 +1472,34 @@ IEW::writebackInsts()
         // when it's ready to execute the strictly ordered load.
         if (!inst->isSquashed() && inst->isExecuted() &&
                 inst->getFault() == NoFault) {
-            // Value prediction: log correct/misprediction
+            // Value prediction: detect and handle misprediction
             if (inst->vpResult.speculative) {
-                if (inst->vpMisprediction) {
+                inst->actualValue = inst->readIntResult();
+
+                if (inst->vpResult.value != inst->actualValue) {
+                    inst->vpMisprediction = true;
                     DPRINTF(IEW,
                             "[ValuePred-IEW-Writeback] Seq:%lu PC:%#lx | "
                             "VP_MISPREDICTION! predicted=%#lx actual=%#lx\n",
                             inst->seqNum, inst->pcState().instAddr(),
                             inst->vpResult.value, inst->actualValue);
+
+                    // Speculatively update predictor to prevent
+                    // infinite mispredict-squash loop on re-fetch
+                    if (valuePred) {
+                        valuepred::VPUpdateMetaData *updateMetaData =
+                            valuepred::VPDataStructFactory::buildUpdateMetaData(
+                                valuePred->getValuePredictorType());
+                        updateMetaData->pc = inst->pcState().instAddr();
+                        updateMetaData->seq_no = inst->seqNum;
+                        updateMetaData->tid = tid;
+                        updateMetaData->actualValue = inst->actualValue;
+                        updateMetaData->isMisprediction = true;
+                        valuePred->updateValuePredictor(updateMetaData);
+                        delete updateMetaData;
+                    }
+
+                    squashDueToValuePrediction(inst, tid);
                 } else {
                     DPRINTF(IEW,
                             "[ValuePred-IEW-Writeback] Seq:%lu PC:%#lx | "

@@ -1213,15 +1213,10 @@ Commit::commitHead(const DynInstPtr &head_inst, unsigned inst_num)
 
     // Value prediction: train predictor at commit time
     if (valuePred && head_inst->canLVP() && (inst_fault == NoFault)) {
-        // Capture actual load value from the instruction result
+        // Capture actual load value from the instruction result.
+        // vpMisprediction was already detected and set at writeback time.
         if (head_inst->isLoad() || head_inst->isStore()) {
             head_inst->actualValue = head_inst->readIntResult();
-        }
-
-        // Detect misprediction by comparing predicted vs actual
-        if (head_inst->vpResult.speculative &&
-            head_inst->vpResult.value != head_inst->actualValue) {
-            head_inst->vpMisprediction = true;
         }
 
         valuepred::VPUpdateMetaData *updateMetaData =
