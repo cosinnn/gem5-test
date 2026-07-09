@@ -1,0 +1,16 @@
+Global frequency set at 1000000000000 ticks per second
+Using /home/cosin/xs-gem5/NEMU/build/riscv64-nemu-interpreter-so for difftest
+gem5 Simulator System.  https://www.gem5.org
+gem5 is copyrighted software; use the --copyright option for details.
+
+gem5 version DEVELOP-FOR-25.1
+gem5 compiled Jul  9 2026 12:13:25
+gem5 started Jul  9 2026 12:23:21
+gem5 executing on LAPTOP-24Q5MFT6, pid 204425
+command line: /home/cosin/xs-gem5/gem5/build/RISCV/gem5.opt --outdir=/home/cosin/xs-gem5/gem5/test/out_estride_fs --debug-flags=VP,EStride,Fetch,Rename,IEW,Commit --debug-file=estride_fs_debug.log /home/cosin/xs-gem5/gem5/test/estride_vp_fs.py
+
+Binary: /home/cosin/xs-gem5/gem5/test/test_estride_fs.elf
+Difftest SO: /home/cosin/xs-gem5/NEMU/build/riscv64-nemu-interpreter-so
+EStride + difftest enabled
+Starting simulation...
+Exiting @ tick 231000 because m5_exit instruction encountered

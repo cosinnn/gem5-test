@@ -3,7 +3,7 @@ from m5.proxy import *
 from m5.SimObject import *
 
 class ValuePredType(ScopedEnum):
-    vals = ["IdealConstantLVP"]
+    vals = ["EStride", "IdealConstantLVP"]
 
 class ValuePredictor(SimObject):
     type = "ValuePredictor"
@@ -11,6 +11,27 @@ class ValuePredictor(SimObject):
     cxx_header = "cpu/valuepred/valuepred_unit.hh"
     abstract = True
     numThreads = Param.Unsigned(Parent.numThreads, "Number of threads")
+
+class EStride(ValuePredictor):
+    type = "EStride"
+    cxx_class = "gem5::valuepred::EStride"
+    cxx_header = "cpu/valuepred/enhanced_stride.hh"
+    abstract = False
+
+    ways = Param.Int(3, "ways of the EStride")
+    strideWidth = Param.Int(20, "Indicates the number of bits used for stride"
+                            "must <= 32")
+    tagWidth = Param.Int(16, "tag-width")
+    logESTBEntrys = Param.Int(7, "log 2 of ES table entry counts")
+    logMaxConfidence = Param.Int(5, "log 2 of max confidence number")
+    thresholdPercent = Param.Float(0.25, "threshold percent of confidence")
+
+    idealWindow = Param.Bool(True, "The key in the ideal window is a 64-bit pc, "
+                             "not hashed")
+    inflightWindowTagLength = Param.Int(64, "inflight window tag length")
+
+    enableTimeMsgInUpdate = Param.Bool(True, "enable use instruction"
+                                       "inflight time in update")
 
 class IdealConstantLVP(ValuePredictor):
     type = "IdealConstantLVP"

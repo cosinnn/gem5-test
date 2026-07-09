@@ -2,6 +2,8 @@
 
 #include <cassert>
 
+#include "cpu/valuepred/es_metadata.hh"
+
 namespace gem5
 {
 
@@ -12,6 +14,8 @@ VPPredMetaData*
 VPDataStructFactory::buildPredMetaData(ValuePredType type)
 {
     switch (type) {
+        case ValuePredType::EStride:
+            return new ESPredMetaData();
         case ValuePredType::IdealConstantLVP:
             return new VPPredMetaData();
         default:
@@ -24,6 +28,8 @@ VPUpdateMetaData*
 VPDataStructFactory::buildUpdateMetaData(ValuePredType type)
 {
     switch (type) {
+        case ValuePredType::EStride:
+            return new ESUpdateMetaData();
         case ValuePredType::IdealConstantLVP:
             return new VPUpdateMetaData();
         default:
@@ -36,6 +42,8 @@ VPSpecUpdateMetaData*
 VPDataStructFactory::buildSpecUpdateMetaData(ValuePredType type)
 {
     switch (type) {
+        case ValuePredType::EStride:
+            return new ESSpecUpdateMetaData();
         case ValuePredType::IdealConstantLVP:
             return new VPSpecUpdateMetaData();
         default:
