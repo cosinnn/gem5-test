@@ -1050,6 +1050,10 @@ Commit::commitInsts()
                 head_inst->updateMiscRegs();
 
                 if (cpu->difftestEnabled()) {
+                    if (head_inst->isStoreConditional()) {
+                        cpu->setSCSuccess(head_inst->lockedWriteSuccess(),
+                                          head_inst->physEffAddr, tid);
+                    }
                     diffInst(tid, head_inst);
                 }
 

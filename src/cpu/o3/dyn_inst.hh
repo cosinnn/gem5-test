@@ -190,6 +190,7 @@ class DynInst : public ExecContext, public RefCounted
         HitExternalSnoop,
         EffAddrValid,
         RecordResult,
+        LockedWriteSuccess,
         Predicate,
         MemAccPredicate,
         PredTaken,
@@ -381,6 +382,10 @@ class DynInst : public ExecContext, public RefCounted
     /** Records changes to result? */
     void recordResult(bool f) { instFlags[RecordResult] = f; }
 
+    /** Whether the store-conditional's locked write succeeded. */
+    bool lockedWriteSuccess() const { return instFlags[LockedWriteSuccess]; }
+    void lockedWriteSuccess(bool b) { instFlags[LockedWriteSuccess] = b; }
+
     /** Is the effective virtual address valid. */
     bool effAddrValid() const { return instFlags[EffAddrValid]; }
     void effAddrValid(bool b) { instFlags[EffAddrValid] = b; }
@@ -552,6 +557,7 @@ class DynInst : public ExecContext, public RefCounted
     bool isLoad()         const { return staticInst->isLoad(); }
     bool isStore()        const { return staticInst->isStore(); }
     bool isAtomic()       const { return staticInst->isAtomic(); }
+    bool isLoadReserved() const { return staticInst->isLoadReserved(); }
     bool isStoreConditional() const
     { return staticInst->isStoreConditional(); }
     bool isInstPrefetch() const { return staticInst->isInstPrefetch(); }

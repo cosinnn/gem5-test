@@ -1,4 +1,5 @@
-# estride_vp_fs.py - FS-mode EStride + difftest test
+"""Run the EStride FS microtest or a XiangShan GCPT with difftest."""
+import argparse
 import os
 import m5
 from m5.objects import *
@@ -10,16 +11,52 @@ from common.Benchmarks import SysConfig
 from common import CacheConfig
 from m5.objects.ValuePredictor import EStride
 
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description='Run EStride with difftest in FS microtest or GCPT mode')
+    parser.add_argument(
+        '--generic-rv-cpt',
+        help='Path to a XiangShan GCPT (.gz or .zstd); enables checkpoint mode')
+    parser.add_argument(
+        '--mem-size',
+        default='512MiB',
+        help='Physical memory size; use 2GB for _6881_0.962556_memory_06.zstd')
+    parser.add_argument(
+        '--maxinsts',
+        type=int,
+        default=0,
+        help='Stop after this many committed instructions; 0 means unlimited')
+    parser.add_argument(
+        '--difftest-ref-so',
+        default=os.environ.get(
+            'GCBV_REF_SO',
+            '/home/cosin/xs-gem5/NEMU/build/riscv64-nemu-interpreter-so'),
+        help='Path to the NEMU difftest shared object')
+    args = parser.parse_args()
+
+    if args.maxinsts < 0:
+        parser.error('--maxinsts must be non-negative')
+    if args.generic_rv_cpt and not os.path.isfile(args.generic_rv_cpt):
+        parser.error(f'checkpoint not found: {args.generic_rv_cpt}')
+    if not os.path.isfile(args.difftest_ref_so):
+        parser.error(f'difftest reference not found: {args.difftest_ref_so}')
+
+    return args
+
+
+args = parse_args()
 this_dir = os.path.dirname(os.path.abspath(__file__))
 binary = os.path.join(this_dir, 'test_estride_fs.elf')
-ref_so = os.environ.get(
-    'GCBV_REF_SO',
-    '/home/cosin/xs-gem5/NEMU/build/riscv64-nemu-interpreter-so')
+ref_so = args.difftest_ref_so
 
-print(f"Binary: {binary}")
+if args.generic_rv_cpt:
+    print(f"GCPT: {args.generic_rv_cpt}")
+else:
+    print(f"Binary: {binary}")
 print(f"Difftest SO: {ref_so}")
 
-system = makeBareMetalXSCptSystem('timing', SysConfig(mem='512MiB'))
+system = makeBareMetalXSCptSystem('timing', SysConfig(mem=args.mem_size))
 
 system.uartlite = UartLite()
 system.uartlite.pio = system.iobus.mem_side_ports
@@ -37,11 +74,13 @@ system.bridge.ranges = [
               system.clint.pio_addr + system.clint.pio_size),
 ]
 
-system.restore_from_gcpt = False
-system.workload.xiangshan_cpt = False
-system.workload.bootloader = binary
+system.restore_from_gcpt = bool(args.generic_rv_cpt)
+system.workload.xiangshan_cpt = bool(args.generic_rv_cpt)
+system.workload.bootloader = '' if args.generic_rv_cpt else binary
 system.workload.auto_reset_vect = False
 system.workload.reset_vect = 0x80000000
+if args.generic_rv_cpt:
+    system.gcpt_file = args.generic_rv_cpt
 
 system.voltage_domain = VoltageDomain(voltage='1V')
 system.clk_domain = SrcClockDomain(
@@ -54,10 +93,13 @@ system.mem_ctrls = [SimpleMemory(range=system.mem_ranges[0])]
 system.mem_ctrls[0].port = system.membus.mem_side_ports
 
 cpu = RiscvO3CPU(clk_domain=system.cpu_clk_domain, cpu_id=0)
-cpu.isa = [RiscvISA(enable_rvv=False)]
+cpu.isa = [RiscvISA(enable_rvv=True, vlen=128, elen=64)]
+cpu.enable_riscv_vector = True
 cpu.mmu.pma_checker = PMAChecker(uncacheable=[AddrRange(0, size=0x80000000)])
 cpu.createThreads()
 cpu.createInterruptController()
+if args.maxinsts:
+    cpu.max_insts_any_thread = args.maxinsts
 
 cpu.valuePred = EStride(
     ways=3,
@@ -72,6 +114,8 @@ cpu.valuePred = EStride(
 cpu.enable_difftest = True
 cpu.difftest_ref_so = ref_so
 print('EStride + difftest enabled')
+if args.maxinsts:
+    print(f'Max instructions: {args.maxinsts}')
 
 system.cpu = [cpu]
 

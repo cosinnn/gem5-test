@@ -154,6 +154,11 @@ const std::array<const char *, NUM_MISCREGS> MiscRegNames = {{
     [MISCREG_MIDELEG]       = "MIDELEG",
     [MISCREG_MTVEC]         = "MTVEC",
     [MISCREG_MCOUNTEREN]    = "MCOUNTEREN",
+    [MISCREG_MENVCFG]       = "MENVCFG",
+    [MISCREG_MSTATEEN0]     = "MSTATEEN0",
+    [MISCREG_MSTATEEN1]     = "MSTATEEN1",
+    [MISCREG_MSTATEEN2]     = "MSTATEEN2",
+    [MISCREG_MSTATEEN3]     = "MSTATEEN3",
     [MISCREG_MSCRATCH]      = "MSCRATCH",
     [MISCREG_MEPC]          = "MEPC",
     [MISCREG_MCAUSE]        = "MCAUSE",
@@ -189,6 +194,10 @@ const std::array<const char *, NUM_MISCREGS> MiscRegNames = {{
     [MISCREG_STVAL]         = "STVAL",
     [MISCREG_SATP]          = "SATP",
     [MISCREG_SENVCFG]       = "SENVCFG",
+    [MISCREG_SSTATEEN0]     = "SSTATEEN0",
+    [MISCREG_SSTATEEN1]     = "SSTATEEN1",
+    [MISCREG_SSTATEEN2]     = "SSTATEEN2",
+    [MISCREG_SSTATEEN3]     = "SSTATEEN3",
 
     [MISCREG_RESERVED03]    = "",
     [MISCREG_RESERVED04]    = "",
@@ -223,6 +232,10 @@ const std::array<const char *, NUM_MISCREGS> MiscRegNames = {{
     [MISCREG_HGEIP]         = "HGEIP",
 
     [MISCREG_HENVCFG]       = "HENVCFG",
+    [MISCREG_HSTATEEN0]     = "HSTATEEN0",
+    [MISCREG_HSTATEEN1]     = "HSTATEEN1",
+    [MISCREG_HSTATEEN2]     = "HSTATEEN2",
+    [MISCREG_HSTATEEN3]     = "HSTATEEN3",
     [MISCREG_HGATP]         = "HGATP",
     [MISCREG_HCONTEXT]      = "HCONTEXT",
     [MISCREG_HTIMEDELTA]    = "HTIMEDELTA",
@@ -927,11 +940,20 @@ ISA::setMiscReg(RegIndex idx, RegVal val)
             break;
           case MISCREG_VSSTATUS:
             {
+                // XiangShan GCPT restorers save VS state even for non-H
+                // checkpoints. Preserve it without enabling H-mode behavior.
+                if (getPrivilegeModeSet() != enums::MHSU) {
+                    setMiscRegNoEffect(idx, val);
+                    break;
+                }
 
                 auto cur = readMiscRegNoEffect(idx);
-                auto wmask_map = CSRWriteMasks[RV64][getPrivilegeModeSet()];
-                auto sstatus_wmask = wmask_map.find(CSR_VSSTATUS)->second;
-                val = (cur & ~sstatus_wmask) | val;
+                const auto &wmask_map =
+                    CSRWriteMasks[RV64][getPrivilegeModeSet()];
+                const auto mask_it = wmask_map.find(CSR_VSSTATUS);
+                panic_if(mask_it == wmask_map.end(),
+                    "Missing VSSTATUS write mask for privilege mode set");
+                val = (cur & ~mask_it->second) | val;
                 setMiscRegNoEffect(idx, val);
             }
             break;
@@ -1217,6 +1239,13 @@ ISA::readCSR(ExecContext *xc, uint64_t csr)
         {
             INTERRUPT mip = xc->readMiscReg(MISCREG_IP);
             readval |= (mip.vssi << 2);
+            break;
+        }
+        case CSR_MISA:
+        {
+        // Match the XiangShan GCPT/NEMU-visible ISA without enabling
+        // unsupported H/V behavior in gem5's internal MISA state.
+            readval |= 0x200082;
             break;
         }
         default: break;

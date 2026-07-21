@@ -331,6 +331,9 @@ def template CSRExecute {{
         auto isa = static_cast<RiscvISA::ISA*>(xc->tcBase()->getIsaPtr());
         auto& csr_data = isa->getCSRDataMap();
         MISA misa = isa->readMiscRegNoEffect(MISCREG_ISA);
+        // XiangShan GCPT restorers save H CSRs even for non-H checkpoints.
+        // Permit those CSR accesses without enabling gem5's H-mode behavior.
+        misa.rvh = 1;
 
         auto csr_data_it = csr_data.find(csr);
         if (csr_data_it == csr_data.end()) {

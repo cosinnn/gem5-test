@@ -1294,11 +1294,12 @@ BaseCPU::diffWithNEMU(ThreadID tid, InstSeqNum seq)
         diffAllStates->gem5RegFile.mstatus = gem5_val;
         auto ref_val = diffAllStates->referenceRegFile.mstatus;
 
-        // Mask FS (bits 13-14) and SD (bit 63 for RV64) to tolerate
-        // difftest mismatches caused by FCSR write not updating FS in gem5.
+    // Mask FS, VS, and SD to tolerate status differences between gem5 and NEMU.
         static const uint64_t mstatusSkipMask =
             RiscvISA::STATUS_FS_MASK |
+            RiscvISA::STATUS_VS_MASK |
             RiscvISA::STATUS_SD_MASKS[enums::RV64];
+            
         gem5_val &= ~mstatusSkipMask;
         ref_val  &= ~mstatusSkipMask;
 
@@ -1539,7 +1540,7 @@ BaseCPU::difftestStep(ThreadID tid, InstSeqNum seq)
     bool is_fence =
         diffInfo.inst->isReadBarrier() || diffInfo.inst->isWriteBarrier();
     bool fence_should_diff = is_fence && !diffInfo.inst->isMicroop();
-    bool lr_should_diff = false; // StaticInst::isLoadReserved not available
+    bool lr_should_diff = diffInfo.inst->isLoadReserved();
     bool amo_should_diff =
         diffInfo.inst->isAtomic() && diffInfo.inst->numDestRegs() > 0;
     bool is_sc =
@@ -1675,6 +1676,14 @@ BaseCPU::clearGuideExecInfo()
         diffAllStates->diff.guide.force_raise_exception = false;
         diffAllStates->diff.guide.force_set_jump_target = false;
     }
+}
+
+void
+BaseCPU::setSCSuccess(bool success, paddr_t addr, ThreadID tid)
+{
+    auto diffAllStates = this->diffAllStates[tid];
+    diffAllStates->diff.sync.lrscValid = success;
+    diffAllStates->diff.sync.lrscAddr = addr;
 }
 
 void

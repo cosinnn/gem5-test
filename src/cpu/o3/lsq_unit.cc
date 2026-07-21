@@ -916,6 +916,7 @@ LSQUnit::writebackStores()
                     inst.get(), request->mainReq(), cacheBlockMask);
             inst->recordResult(true);
             request->packetSent();
+            inst->lockedWriteSuccess(success);
 
             if (!success) {
                 request->complete();

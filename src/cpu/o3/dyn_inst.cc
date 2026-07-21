@@ -416,6 +416,10 @@ DynInst::completeAcc(PacketPtr pkt)
 
     fault = staticInst->completeAcc(pkt, this, traceData);
 
+    if (fault == NoFault && isStoreConditional()) {
+        lockedWriteSuccess(pkt->req->getExtraData() != 0);
+    }
+
     thread->noSquashFromTC = no_squash_from_TC;
 
     return fault;

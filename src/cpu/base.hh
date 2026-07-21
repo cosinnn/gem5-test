@@ -977,6 +977,7 @@ class BaseCPU : public ClockedObject
     inline bool difftestEnabled() const { return enableDifftest; }
     void displayGem5Regs(ThreadID tid);
     void difftestRaiseIntr(uint64_t no, ThreadID tid = 0);
+    void setSCSuccess(bool success, paddr_t addr, ThreadID tid);
     void setExceptionGuideExecInfo(uint64_t exception_num, uint64_t mtval,
                                     uint64_t stval, bool force_set_jump_target,
                                     uint64_t jump_target, ThreadID tid);
